@@ -1,0 +1,20 @@
+{
+	"Shops": [
+		{
+			"Name": "Okey",
+			"Url": "https://www.okeydostavka.ru/msk",
+			"Categories": [
+				{
+					"Name": "Мясо, птица, колбасы",
+					"Url": "miaso-ptitsa-kolbasy",
+					"SubCategories": [
+						{
+							"Name": "Мясо и птица",
+							"Url": "miaso-i-ptitsa"
+						}
+					]
+				}
+			]
+		}
+	]
+}
