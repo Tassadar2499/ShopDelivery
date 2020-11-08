@@ -13,11 +13,13 @@ namespace ShopsParser
 		{
 			var text = File.ReadAllText(SETTING_PATH);
 			var setting = JsonConvert.DeserializeObject<Setting>(text);
-			var executor = new Executor();
+			var executor = new MainParser();
 
-			var productsQuery = setting.Shops.AsParallel().SelectMany(executor.GetProductsByShop);
+			var productsJsonCollection = setting.Shops.AsParallel()
+				.SelectMany(executor.GetProductsByShop)
+				.Select(JsonConvert.SerializeObject);
 
-			var products = productsQuery.ToArray();
+			var productsJsonArr = productsJsonCollection.ToArray();
 		}
 	}
 }

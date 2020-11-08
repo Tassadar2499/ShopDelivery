@@ -1,47 +1,41 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
-using ShopsParser.Settings;
+﻿using AngleSharp.Dom;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ShopsParser
+namespace ShopsParser.Parsers
 {
-	public class Executor
+	public class OkeyParser : IShopParser
 	{
-		private readonly IBrowsingContext _context;
-		
-		public Executor()
-		{
-			var config = Configuration.Default.WithDefaultLoader();
-			_context = BrowsingContext.New(config);
-		}
-
-		public ParallelQuery<Product> GetProductsByShop(Shop shop)
-		{
-			var urlCollection = shop.Categories.SelectMany(c => c.SubCategories.Select(s => $"{shop.Url}/{c.Url}/{s.Url}"));
-			return urlCollection.AsParallel().SelectMany(GetProductsByUrl);
-		}
-
-		private ParallelQuery<Product> GetProductsByUrl(string url)
-		{
-			var document = _context.OpenAsync(url).Result;
-			return document.GetElementsByClassName("product").AsParallel().Select(GetProduct);
-		}
+		public ParallelQuery<Product> GetProducts(IDocument document) 
+			=> document.GetElementsByClassName("product").AsParallel().Select(GetProduct);
 
 		private Product GetProduct(IElement element)
 		{
+			var productNameTask = new Task<string>(() => GetProductName(element));
+			productNameTask.Start();
+
+			var priceTask = new Task<float>(() => GetPrice(element));
+			priceTask.Start();
+
+			var weightTask = new Task<float?>(() => GetWeight(element));
+			weightTask.Start();
+
+			var imageStrContentTask = new Task<string>(() => GetImageStrContent(element));
+			imageStrContentTask.Start();
+
+			Task.WaitAll(productNameTask, priceTask, weightTask, imageStrContentTask);
+
 			return new Product
 			(
-				GetProductName(element),
-				GetPrice(element),
-				GetWeight(element),
-				GetImageStrContent(element)
+				productNameTask.Result,
+				priceTask.Result,
+				weightTask.Result,
+				imageStrContentTask.Result
 			);
 		}
 
@@ -53,17 +47,18 @@ namespace ShopsParser
 			return anchorElement.GetAttribute("title");
 		}
 
-		private float GetWeight(IElement element)
+		private float? GetWeight(IElement element)
 		{
 			var weightElement = element.GetElementsByClassName("product-weight").SingleOrDefault();
 			var weight = FilterTextContent(weightElement.TextContent).Replace("кг", "");
 
-			return float.Parse(weight);
+			return !string.IsNullOrEmpty(weight)
+				? float.Parse(weight)
+				: null;
 		}
 
 		private float GetPrice(IElement element)
 		{
-			var priceElements = element.GetElementsByClassName("product-price").ToArray();
 			var priceElement = element.GetElementsByClassName("product-price").FirstOrDefault();
 
 			var regExp = new Regex(@"\d+,\d+");
