@@ -15,7 +15,8 @@ namespace ShopsParser
 			var setting = JsonConvert.DeserializeObject<Setting>(text);
 			var executor = new MainParser();
 
-			var productsJsonCollection = setting.Shops.AsParallel()
+			var productsJsonCollection = setting.Shops
+				.AsParallel()
 				.SelectMany(executor.GetProductsByShop)
 				.Select(JsonConvert.SerializeObject);
 
