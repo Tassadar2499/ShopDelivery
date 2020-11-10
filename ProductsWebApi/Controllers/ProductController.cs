@@ -10,29 +10,33 @@ using System.Threading.Tasks;
 
 namespace ProductsWebApi.Controllers
 {
-	[ApiController]
-	[Route("api/product")]
-	public class ProductController : ControllerBase
+	public class ProductsController : ODataController
 	{
 		private readonly ApplicationDbContext _context;
 
-		public ProductController(ApplicationDbContext context)
+		public ProductsController(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
-		[HttpGet("list")]
 		[EnableQuery]
-		public async Task<List<Product>> GetAsync()
-		{
-			return await _context.Products.ToListAsync();
-		}
-
-		[HttpGet]
 		public void Write()
 		{
 			_context.Products.Add(new Product());
 			_context.SaveChanges();
+		}
+
+		[EnableQuery]
+		public IQueryable<Product> Get()
+		{
+			return _context.Products;
+		}
+
+		[EnableQuery]
+		public SingleResult<Product> Get([FromODataUri] int key)
+		{
+			IQueryable<Product> result = _context.Products.Where(p => p.Id == key);
+			return SingleResult.Create(result);
 		}
 	}
 }
