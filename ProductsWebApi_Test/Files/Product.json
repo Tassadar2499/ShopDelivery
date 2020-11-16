@@ -1,0 +1,10 @@
+{
+	"Id": 2,
+	"Shop": 1,
+	"Category": 1,
+	"SubCategory": 1,
+	"Name": "Test",
+	"Price": 3,
+	"Mass": 4,
+	"ImgContent":  "afg"
+}

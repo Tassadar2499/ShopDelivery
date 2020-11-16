@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Routing;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductsWebApi.Models;
 using System;
@@ -10,33 +8,32 @@ using System.Threading.Tasks;
 
 namespace ProductsWebApi.Controllers
 {
-	public class ProductsController : ODataController
+	[ApiController]
+	[Route("api/[controller]")]
+	public class ProductController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 
-		public ProductsController(ApplicationDbContext context)
+		public ProductController(ApplicationDbContext context) => _context = context;
+
+		[HttpPost]
+		public async void CreateAsync(Product product)
 		{
-			_context = context;
+			await AddProductAsync(product);
 		}
 
-		[EnableQuery]
-		public void Write()
+		[HttpGet]
+		public async Task<List<Product>> Get() 
+			=> await _context.Products.ToListAsync();
+
+		[HttpGet("{id}")]
+		public async Task<IQueryable<Product>> Get(int id)
+			=> await Task.Run(() => _context.Products.Where(p => p.Id == id));
+
+		private async Task AddProductAsync(Product product)
 		{
-			_context.Products.Add(new Product());
+			_context.Products.Add(product);
 			_context.SaveChanges();
-		}
-
-		[EnableQuery]
-		public IQueryable<Product> Get()
-		{
-			return _context.Products;
-		}
-
-		[EnableQuery]
-		public SingleResult<Product> Get([FromODataUri] int key)
-		{
-			IQueryable<Product> result = _context.Products.Where(p => p.Id == key);
-			return SingleResult.Create(result);
 		}
 	}
 }
