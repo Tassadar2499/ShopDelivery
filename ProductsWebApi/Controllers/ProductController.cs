@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductsWebApi.Models;
+using ProductsWebApi.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,16 @@ namespace ProductsWebApi.Controllers
 		public ProductController(ApplicationDbContext context) => _context = context;
 
 		[HttpPost]
+		public async void CreateOrUpdateAsync(ProductData productData)
+		{
+			await _context.CreateOrUpdateProductsAsync(productData.Products);
+		}
+
+		[HttpPost]
 		public async void CreateAsync(Product product)
 		{
-			await AddProductAsync(product);
+			await _context.AddAsync(product);
+			await _context.SaveChangesAsync();
 		}
 
 		[HttpGet]
@@ -27,13 +35,7 @@ namespace ProductsWebApi.Controllers
 			=> await _context.Products.ToListAsync();
 
 		[HttpGet("{id}")]
-		public async Task<IQueryable<Product>> Get(int id)
-			=> await Task.Run(() => _context.Products.Where(p => p.Id == id));
-
-		private async Task AddProductAsync(Product product)
-		{
-			_context.Products.Add(product);
-			_context.SaveChanges();
-		}
+		public async Task<List<Product>> Get(int id)
+			=> await Task.Run(() => _context.Products.Where(p => p.Id == id).ToList());
 	}
 }
