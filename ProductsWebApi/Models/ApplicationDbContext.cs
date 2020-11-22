@@ -13,22 +13,36 @@ namespace ProductsWebApi.Models
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options) => Database.EnsureCreated();
 
+		public async Task CreateAsync(Product product)
+			=> await Task.Run(() => Create(product));
+
 		public async Task CreateOrUpdateProductsAsync(IEnumerable<Product> products)
+			=> await Task.Run(() => CreateOrUpdateProducts(products));
+
+		private void CreateOrUpdateProducts(IEnumerable<Product> products)
 		{
 			var (toUpdate, toCreate) = products.SplitCollection(p => Products.Any(o => o.Id == p.Id));
 
-			await UpdateProductsAsync(toUpdate);
-			await AddProductsAsync(toCreate);
-			await SaveChangesAsync();
+			Parallel.Invoke(() => UpdateProducts(toUpdate), () => AddProducts(toCreate));
+			SaveChanges();
 		}
 
 		public async Task UpdateProductsAsync(IEnumerable<Product> products)
-			=> await InvokeProductsAsync(products, (Product p) => Update(p));
+			=> await Task.Run(() => UpdateProducts(products));
 
 		public async Task AddProductsAsync(IEnumerable<Product> products)
-			=> await InvokeProductsAsync(products, (Product p) => Add(p));
+			=> await Task.Run(() => AddProducts(products));
 
-		private async Task InvokeProductsAsync(IEnumerable<Product> products, Action<Product> action)
-			=> await Task.Run(() => Parallel.ForEach(products, action));
+		private void UpdateProducts(IEnumerable<Product> products)
+			=> Parallel.ForEach(products, (Product p) => Update(p));
+
+		private void AddProducts(IEnumerable<Product> products)
+			=> Parallel.ForEach(products, (Product p) => Add(p));
+
+		private void Create(Product product)
+		{
+			Add(product);
+			SaveChanges();
+		}
 	}
 }

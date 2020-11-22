@@ -10,25 +10,20 @@ using System.Threading.Tasks;
 namespace ProductsWebApi.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("[controller]")]
 	public class ProductController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 
 		public ProductController(ApplicationDbContext context) => _context = context;
 
-		[HttpPost]
-		public async void CreateOrUpdateAsync(ProductData productData)
-		{
-			await _context.CreateOrUpdateProductsAsync(productData.Products);
-		}
+		[HttpPost("createorupdate")]
+		public async Task CreateOrUpdateAsync([FromBody] ProductData productData) 
+			=> await _context.CreateOrUpdateProductsAsync(productData.Products);
 
-		[HttpPost]
-		public async void CreateAsync(Product product)
-		{
-			await _context.AddAsync(product);
-			await _context.SaveChangesAsync();
-		}
+		[HttpPost("create")]
+		public async Task CreateAsync(Product product) 
+			=> await _context.CreateAsync(product);
 
 		[HttpGet]
 		public async Task<List<Product>> Get() 
