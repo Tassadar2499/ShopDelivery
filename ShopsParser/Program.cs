@@ -17,7 +17,7 @@ namespace ShopsParser
 
 			var productsJsonCollection = setting.Shops
 				.AsParallel()
-				.SelectMany(executor.GetProductsByShop)
+				.Select(executor.GetProductsByShop)
 				.Select(JsonConvert.SerializeObject);
 
 			var productsJsonArr = productsJsonCollection.ToArray();
