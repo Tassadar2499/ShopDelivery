@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
+using ProductsEntities;
+using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopsParser
 {
@@ -14,12 +17,12 @@ namespace ShopsParser
 			var setting = JsonConvert.DeserializeObject<Setting>(text);
 			var executor = new MainParser();
 
-			var productsJsonCollection = setting.Shops
+			var products = setting.Shops
 				.AsParallel()
-				.Select(executor.GetProductsByShop)
-				.Select(JsonConvert.SerializeObject);
+				.SelectMany(executor.GetProductsByShop);
 
-			var productsJsonArr = productsJsonCollection.ToArray();
+			using var webLogic = new WebLogic(setting.WebApiUrl);
+			Parallel.ForEach(products, webLogic.CreateProductRemote);
 		}
 	}
 }

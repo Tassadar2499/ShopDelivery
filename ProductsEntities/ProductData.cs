@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
-using ProductsEntities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ProductsWebApi.Models.Entities
+namespace ProductsEntities
 {
 	[JsonObject]
 	public class ProductData

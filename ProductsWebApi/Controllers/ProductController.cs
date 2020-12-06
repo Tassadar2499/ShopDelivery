@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProductsEntities;
 using ProductsWebApi.Models;
-using ProductsWebApi.Models.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

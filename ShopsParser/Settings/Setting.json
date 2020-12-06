@@ -1,4 +1,5 @@
 {
+	"WebApiUrl": "https://productswebapi20201116224729.azurewebsites.net",
 	"Shops": [
 		{
 			"Name": "Okey",
