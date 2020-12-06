@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
-using ProductsWebApi.Models;
-using System;
+using ProductsEntities;
 using System.IO;
 using Xunit;
 

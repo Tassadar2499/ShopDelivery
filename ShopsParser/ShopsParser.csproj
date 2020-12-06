@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProductsEntities\ProductsEntities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Settings\Setting.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

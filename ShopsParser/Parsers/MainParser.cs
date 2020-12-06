@@ -1,15 +1,9 @@
 ﻿using AngleSharp;
-using AngleSharp.Dom;
+using ProductsEntities;
 using ShopsParser.Parsers;
 using ShopsParser.Settings;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ShopsParser
 {
@@ -17,7 +11,7 @@ namespace ShopsParser
 	{
 		private readonly IBrowsingContext _context;
 		private readonly Dictionary<string, IShopParser> _shopParsers;
-		
+
 		public MainParser()
 		{
 			var config = Configuration.Default.WithDefaultLoader();

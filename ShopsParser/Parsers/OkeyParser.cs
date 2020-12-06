@@ -1,9 +1,9 @@
 ﻿using AngleSharp.Dom;
+using ProductsEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -27,7 +27,7 @@ namespace ShopsParser.Parsers
 			};
 		}
 
-		public ParallelQuery<Product> GetProducts(IDocument document) 
+		public ParallelQuery<Product> GetProducts(IDocument document)
 			=> document.GetElementsByClassName("product").AsParallel().Select(GetProduct);
 
 		private Product GetProduct(IElement element)
@@ -54,23 +54,23 @@ namespace ShopsParser.Parsers
 
 			Task.WaitAll(productNameTask, priceTask, weightTask, imageStrContentTask);
 
-			return new Product
-			(
-				ShopType.Okey,
-				productCategoryTask.Result,
-				productSubCategoryTask.Result,
-				productNameTask.Result,
-				priceTask.Result,
-				weightTask.Result,
-				imageStrContentTask.Result
-			);
+			return new Product()
+			{
+				ShopType = ShopType.Okey,
+				Category = productCategoryTask.Result,
+				SubCategory = productSubCategoryTask.Result,
+				Name = productNameTask.Result,
+				Price = priceTask.Result,
+				Mass = weightTask.Result,
+				ImgContent = imageStrContentTask.Result
+			};
 		}
 
 		private ProductCategory GetProductCategory(string url)
 		{
 			var categoriesKey = _categories.Keys.FirstOrDefault(k => url.Contains(k));
 
-			return categoriesKey == null 
+			return categoriesKey == null
 				? ProductCategory.None
 				: _categories[categoriesKey];
 		}

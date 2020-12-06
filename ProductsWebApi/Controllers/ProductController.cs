@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProductsEntities;
 using ProductsWebApi.Models;
 using ProductsWebApi.Models.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,15 +18,15 @@ namespace ProductsWebApi.Controllers
 		public ProductController(ApplicationDbContext context) => _context = context;
 
 		[HttpPost("createorupdate")]
-		public async Task CreateOrUpdateAsync([FromBody] ProductData productData) 
+		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
 			=> await _context.CreateOrUpdateProductsAsync(productData.Products);
 
 		[HttpPost("create")]
-		public async Task CreateAsync(Product product) 
+		public async Task CreateAsync(Product product)
 			=> await _context.CreateAsync(product);
 
 		[HttpGet]
-		public async Task<List<Product>> Get() 
+		public async Task<List<Product>> Get()
 			=> await _context.Products.ToListAsync();
 
 		[HttpGet("{id}")]

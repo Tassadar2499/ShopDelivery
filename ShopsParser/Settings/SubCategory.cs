@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShopsParser.Settings
 {
@@ -10,6 +7,7 @@ namespace ShopsParser.Settings
 	{
 		[JsonProperty]
 		public string Name { get; set; }
+
 		[JsonProperty]
 		public string Url { get; set; }
 	}
