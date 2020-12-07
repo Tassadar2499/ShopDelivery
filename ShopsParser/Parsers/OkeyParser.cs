@@ -1,4 +1,6 @@
 ﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Media;
 using ProductsEntities;
 using System;
 using System.Collections.Generic;
@@ -49,10 +51,10 @@ namespace ShopsParser.Parsers
 			var weightTask = new Task<float?>(() => GetWeight(element));
 			weightTask.Start();
 
-			var imageStrContentTask = new Task<string>(() => GetImageStrContent(element));
-			imageStrContentTask.Start();
+			var imageUrlTask = new Task<string>(() => GetImageUrl(element));
+			imageUrlTask.Start();
 
-			Task.WaitAll(productNameTask, priceTask, weightTask, imageStrContentTask);
+			Task.WaitAll(productNameTask, priceTask, weightTask, imageUrlTask);
 
 			return new Product()
 			{
@@ -62,7 +64,7 @@ namespace ShopsParser.Parsers
 				Name = productNameTask.Result,
 				Price = priceTask.Result,
 				Mass = weightTask.Result,
-				ImgContent = imageStrContentTask.Result
+				ImageUrl = imageUrlTask.Result
 			};
 		}
 
@@ -112,16 +114,13 @@ namespace ShopsParser.Parsers
 			return float.Parse(priceText);
 		}
 
-		private string GetImageStrContent(IElement element)
+		private string GetImageUrl(IElement element)
 		{
 			var imageDivElement = element.GetElementsByClassName("image").SingleOrDefault();
-			var imageElement = imageDivElement.GetElementsByTagName("img").SingleOrDefault();
-			var src = imageElement.GetAttribute("src");
+			var imageElement = imageDivElement.GetElementsByTagName("img").SingleOrDefault() as IHtmlImageElement;
+			var src = imageElement.GetAttribute("data-src");
 
-			using var webClient = new WebClient();
-			var imageBytes = webClient.DownloadData($"{element.BaseUri}/{src}");
-
-			return Convert.ToBase64String(imageBytes);
+			return $"{element.BaseUrl.Origin}/{src}";
 		}
 
 		private string FilterTextContent(string str)

@@ -45,6 +45,6 @@ namespace ProductsEntities
 		public float? Mass { get; set; }
 
 		[JsonProperty]
-		public string ImgContent { get; set; }
+		public string ImageUrl { get; set; }
 	}
 }

@@ -18,15 +18,19 @@ namespace ShopsParser
 		public WebLogic(string url)
 		{
 			_httpClient = new HttpClient();
-			_url = $"{url}/product/create";
+			_url = url;
 		}
 
-		public void CreateProductRemote(Product product)
-		{ 
-			var message = _httpClient.PostAsJsonAsync(_url, product).Result;
+		public void CreateOrUpdateProducts(ProductData productData)
+		{
+			var url = $"{_url}/product/createorupdate";
+			var responseMessage = _httpClient.PostAsJsonAsync(url, productData).Result;
 
-			if (message.StatusCode != HttpStatusCode.OK)
-				throw new WebException("Error in send request");
+			if (responseMessage.StatusCode != HttpStatusCode.OK)
+			{
+				var result = responseMessage.Content.ReadAsStringAsync().Result;
+				throw new WebException($"Error in send request {result}");
+			}
 		}
 
 		public void Dispose()

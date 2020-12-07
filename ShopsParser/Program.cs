@@ -19,10 +19,13 @@ namespace ShopsParser
 
 			var products = setting.Shops
 				.AsParallel()
-				.SelectMany(executor.GetProductsByShop);
+				.SelectMany(executor.GetProductsByShop)
+				.ToArray();
+
+			var productData = new ProductData() { Products = products };
 
 			using var webLogic = new WebLogic(setting.WebApiUrl);
-			Parallel.ForEach(products, webLogic.CreateProductRemote);
+			webLogic.CreateOrUpdateProducts(productData);
 		}
 	}
 }
