@@ -1,0 +1,14 @@
+﻿@model Shop[]
+@{
+    ViewData["Title"] = "Shops";
+}
+
+<h1>Shops</h1>
+
+@foreach (var shop in Model)
+{ 
+    <div>
+        <p>@shop.Name</p>
+        <img src="@shop.ImgUrl"/>
+    </div>
+}
