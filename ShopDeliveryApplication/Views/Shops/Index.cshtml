@@ -1,14 +1,16 @@
-﻿@model Shop[]
+﻿@using ShopsDbEntities
+
+@model Shop[]
 @{
-    ViewData["Title"] = "Shops";
+	ViewData["Title"] = "Shops";
 }
 
 <h1>Shops</h1>
 
 @foreach (var shop in Model)
-{ 
-    <div>
-        <p>@shop.Name</p>
-        <img src="@shop.ImgUrl"/>
-    </div>
+{
+	<div>
+		<p>@shop.Name</p>
+		<img src="@shop.ImgUrl" />
+	</div>
 }

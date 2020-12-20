@@ -1,11 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopsDbEntities.ShopsEntities;
 using System.Threading.Tasks;
 
 namespace ShopsDbEntities
 {
 	public class ApplicationDbContext : DbContext
 	{
+		public DbSet<Shop> Shops { get; set; }
+		public DbSet<ShopLocation> ShopsLocations { get; set; }
 		public DbSet<Product> Products { get; set; }
+		public DbSet<ProductDbCategory> ProductCategories { get; set; }
+		public DbSet<ProductDbSubCategory> ProductSubCategories { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options) => Database.EnsureCreated();

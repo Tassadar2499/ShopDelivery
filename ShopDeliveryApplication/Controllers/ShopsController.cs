@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShopDeliveryApplication.Models;
-using System;
-using System.Collections.Generic;
+using ShopsDbEntities;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Controllers
 {
@@ -16,7 +13,7 @@ namespace ShopDeliveryApplication.Controllers
 		public IActionResult Index()
 		{
 			var shops = _context.Shops.ToArray();
-			
+
 			return View(shops);
 		}
 	}

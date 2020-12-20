@@ -8,7 +8,7 @@ namespace ShopsParser
 	{
 		[JsonProperty]
 		public string WebApiUrl { get; set; }
-		
+
 		[JsonProperty]
 		public Shop[] Shops { get; set; }
 	}
