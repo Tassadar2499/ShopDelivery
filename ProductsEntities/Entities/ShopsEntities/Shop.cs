@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShopsDbEntities
+﻿namespace ShopsDbEntities
 {
 	public enum ShopType : byte
 	{

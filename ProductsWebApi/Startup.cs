@@ -10,23 +10,25 @@ using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using OData.Swagger.Services;
 using ShopsDbEntities;
+using ShopsDbEntities.Logic;
 using System;
 
 namespace ProductsWebApi
 {
 	public class Startup
 	{
+		public IConfiguration Configuration { get; }
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
 		}
 
-		public IConfiguration Configuration { get; }
-
 		public void ConfigureServices(IServiceCollection services)
 		{
 			string connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+			services.AddScoped<ProductsLogic>();
 
 			services.AddOData();
 

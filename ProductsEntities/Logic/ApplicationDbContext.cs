@@ -1,49 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShopsDbEntities.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShopsDbEntities
 {
-    public class ApplicationDbContext : DbContext
+	public class ApplicationDbContext : DbContext
 	{
 		public DbSet<Product> Products { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options) => Database.EnsureCreated();
 
-		public async Task CreateAsync(Product product)
-			=> await Task.Run(() => Create(product));
+		public async Task CreateAndSaveAsync<T>(T entity)
+			=> await Task.Run(() => CreateAndSave(entity));
 
-		public async Task CreateOrUpdateProductsAsync(IEnumerable<Product> products)
-			=> await Task.Run(() => CreateOrUpdateProducts(products));
-
-		private void CreateOrUpdateProducts(IEnumerable<Product> products)
+		public void CreateAndSave<T>(T entity)
 		{
-			var (toUpdate, toCreate) = products.SplitCollection(p => Products.Any(o => o.Id == p.Id));
-
-			Parallel.Invoke(() => UpdateProducts(toUpdate), () => AddProducts(toCreate));
-			SaveChanges();
-		}
-
-		public async Task UpdateProductsAsync(IEnumerable<Product> products)
-			=> await Task.Run(() => UpdateProducts(products));
-
-		public async Task AddProductsAsync(IEnumerable<Product> products)
-			=> await Task.Run(() => AddProducts(products));
-
-		private void UpdateProducts(IEnumerable<Product> products)
-			=> Parallel.ForEach(products, (Product p) => Update(p));
-
-		private void AddProducts(IEnumerable<Product> products)
-			=> Parallel.ForEach(products, (Product p) => Add(p));
-
-		private void Create(Product product)
-		{
-			Add(product);
+			Add(entity);
 			SaveChanges();
 		}
 	}
