@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi", "ProductsW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi_Test", "ProductsWebApi_Test\ProductsWebApi_Test.csproj", "{73311F7E-1767-4B3B-B03E-9F38A0782494}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsEntities", "ProductsEntities\ProductsEntities.csproj", "{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbEntities", "ProductsEntities\ShopsDbEntities.csproj", "{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

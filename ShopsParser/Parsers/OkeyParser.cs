@@ -1,7 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Media;
-using ProductsEntities;
+using ShopsDbEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

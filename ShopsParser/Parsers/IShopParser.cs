@@ -1,5 +1,5 @@
 ﻿using AngleSharp.Dom;
-using ProductsEntities;
+using ShopsDbEntities;
 using System.Linq;
 
 namespace ShopsParser

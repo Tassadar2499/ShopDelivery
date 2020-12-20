@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductsEntities;
 using ProductsWebApi.Models.Utils;
+using ShopsDbEntities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

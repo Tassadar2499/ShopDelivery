@@ -1,25 +1,7 @@
 ﻿using Newtonsoft.Json;
 
-namespace ProductsEntities
+namespace ShopsDbEntities
 {
-	public enum ShopType : byte
-	{
-		None = 0,
-		Okey = 1
-	}
-
-	public enum ProductCategory : byte
-	{
-		None = 0,
-		Meat = 1
-	}
-
-	public enum ProductSubCategory : byte
-	{
-		None = 0,
-		Chicken = 1
-	}
-
 	[JsonObject]
 	public class Product
 	{

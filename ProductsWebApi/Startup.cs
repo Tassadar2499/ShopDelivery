@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using OData.Swagger.Services;
-using ProductsEntities;
+using ShopsDbEntities;
 using ProductsWebApi.Models;
 using System;
 

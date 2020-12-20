@@ -1,9 +1,10 @@
 ﻿using AngleSharp;
-using ProductsEntities;
+using ShopsDbEntities;
 using ShopsParser.Parsers;
 using ShopsParser.Settings;
 using System.Collections.Generic;
 using System.Linq;
+using Shop = ShopsParser.Settings.Shop;
 
 namespace ShopsParser
 {

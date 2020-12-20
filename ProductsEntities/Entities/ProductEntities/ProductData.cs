@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProductsEntities
+namespace ShopsDbEntities
 {
 	[JsonObject]
 	public class ProductData

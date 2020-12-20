@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using ProductsEntities;
+using ShopsDbEntities;
 using System.IO;
 using Xunit;
 

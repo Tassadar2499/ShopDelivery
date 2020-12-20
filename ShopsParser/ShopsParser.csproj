@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductsEntities\ProductsEntities.csproj" />
+    <ProjectReference Include="..\ProductsEntities\ShopsDbEntities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
