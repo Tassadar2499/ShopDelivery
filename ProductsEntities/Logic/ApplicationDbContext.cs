@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductsWebApi.Models.Utils;
-using ShopsDbEntities;
+using ShopsDbEntities.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace ProductsWebApi.Models
+namespace ShopsDbEntities
 {
-	public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
 	{
 		public DbSet<Product> Products { get; set; }
 

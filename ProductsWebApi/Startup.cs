@@ -10,7 +10,6 @@ using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using OData.Swagger.Services;
 using ShopsDbEntities;
-using ProductsWebApi.Models;
 using System;
 
 namespace ProductsWebApi

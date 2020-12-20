@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace ProductsWebApi.Models.Utils
+namespace ShopsDbEntities.Utils
 {
 	public static class LinqExtensions
 	{

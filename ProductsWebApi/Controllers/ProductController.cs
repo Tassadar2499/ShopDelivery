@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopsDbEntities;
-using ProductsWebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
