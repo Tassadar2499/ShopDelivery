@@ -1,0 +1,18 @@
+﻿@using ShopsDbEntities
+
+@model Product[]
+@{
+	ViewData["Title"] = "Products";
+}
+
+<h1>Продукты</h1>
+
+@foreach (var product in Model)
+{
+	<div>
+		<p>@product.Name</p>
+		<img src="@product.ImageUrl" />
+		<p>@product.Price</p>
+		<p>@product.Mass кг</p>
+	</div>
+}

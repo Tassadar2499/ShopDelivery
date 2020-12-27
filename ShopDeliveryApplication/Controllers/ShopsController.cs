@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace ShopDeliveryApplication.Controllers
 {
-	public class ShopsController : Controller
+	public class ShopsController : CatalogController
 	{
-		private readonly ApplicationDbContext _context;
-
-		public ShopsController(ApplicationDbContext context) => _context = context;
+		public ShopsController(ApplicationDbContext context) : base(context)
+		{
+		}
 
 		public IActionResult Index()
 		{

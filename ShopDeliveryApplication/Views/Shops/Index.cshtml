@@ -5,12 +5,14 @@
 	ViewData["Title"] = "Shops";
 }
 
-<h1>Shops</h1>
+<h1>Магазины</h1>
 
 @foreach (var shop in Model)
 {
 	<div>
 		<p>@shop.Name</p>
-		<img src="@shop.ImgUrl" />
+		<a asp-controller="ProductCategories" asp-route-shopId="@shop.Id">
+			<img src="@shop.ImgUrl" />
+		</a>
 	</div>
 }

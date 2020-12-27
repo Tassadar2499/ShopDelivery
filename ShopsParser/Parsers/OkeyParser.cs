@@ -53,6 +53,8 @@ namespace ShopsParser.Parsers
 
 			Task.WaitAll(productNameTask, priceTask, weightTask, imageUrlTask);
 
+			var category = productCategoryTask.Result;
+
 			return new Product()
 			{
 				ShopType = ShopType.Okey,
