@@ -11,7 +11,9 @@
 {
 	<div>
 		<p>@category.Name</p>
-		<a asp-controller="ProductSubCategories" asp-route-shopId="@ViewData["ShopId"]" asp-route-categoryId="@category.Id">
+		<a asp-controller="ProductSubCategories"
+		   asp-route-shopId="@ViewData["ShopId"]"
+		   asp-route-categoryId="@category.Id">
 			<img src="@category.ImgUrl" />
 		</a>
 	</div>

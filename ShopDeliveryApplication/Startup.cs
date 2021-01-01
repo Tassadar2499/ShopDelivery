@@ -20,6 +20,9 @@ namespace ShopDeliveryApplication
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDistributedMemoryCache();
+			services.AddSession();
+
 			string connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 
@@ -37,6 +40,8 @@ namespace ShopDeliveryApplication
 			{
 				app.UseExceptionHandler("/Home/Error");
 			}
+
+			app.UseSession();
 			app.UseStaticFiles();
 
 			app.UseRouting();

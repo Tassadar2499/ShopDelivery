@@ -14,7 +14,6 @@ namespace ProductsWebApi.Controllers
 	{
 		private readonly ProductsLogic _logic;
 		private ApplicationDbContext Context => _logic.Context;
-
 		public ProductController(ProductsLogic context) => _logic = context;
 
 		[HttpPost("createorupdate")]
