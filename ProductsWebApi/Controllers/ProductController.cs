@@ -14,7 +14,9 @@ namespace ProductsWebApi.Controllers
 	{
 		private readonly ProductsLogic _logic;
 		private ApplicationDbContext Context => _logic.Context;
-		public ProductController(ProductsLogic context) => _logic = context;
+		private IQueryable<Product> Products => _logic.Products;
+
+		public ProductController(ProductsLogic logic) => _logic = logic;
 
 		[HttpPost("createorupdate")]
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
@@ -26,10 +28,10 @@ namespace ProductsWebApi.Controllers
 
 		[HttpGet]
 		public async Task<List<Product>> Get()
-			=> await Context.Products.ToListAsync();
+			=> await Products.ToListAsync();
 
 		[HttpGet("{id}")]
 		public async Task<List<Product>> Get(int id)
-			=> await Task.Run(() => Context.Products.Where(p => p.Id == id).ToList());
+			=> await Task.Run(() => Products.Where(p => p.Id == id).ToList());
 	}
 }

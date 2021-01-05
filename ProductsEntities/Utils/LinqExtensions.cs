@@ -23,7 +23,7 @@ namespace ShopsDbEntities.Utils
 			return (first, second);
 		}
 
-		public static IQueryable<T> WhereByExpression<T>(this IQueryable<T> collection, Expression<Func<T, bool>> predicate) 
+		public static IQueryable<T> WhereByExpression<T>(this IQueryable<T> collection, Expression<Func<T, bool>> predicate)
 			=> collection.Where(predicate);
 	}
 }

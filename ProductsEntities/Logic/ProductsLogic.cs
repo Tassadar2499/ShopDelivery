@@ -8,6 +8,7 @@ namespace ShopsDbEntities.Logic
 	public class ProductsLogic
 	{
 		public ApplicationDbContext Context { get; }
+		public IQueryable<Product> Products => Context.Products;
 
 		public ProductsLogic(ApplicationDbContext context) => Context = context;
 
@@ -16,7 +17,7 @@ namespace ShopsDbEntities.Logic
 
 		public void CreateOrUpdateProducts(IEnumerable<Product> products)
 		{
-			var (toUpdate, toCreate) = products.SplitCollection(p => Context.Products.Any(o => o.Id == p.Id));
+			var (toUpdate, toCreate) = products.SplitCollection(p => Products.Any(o => o.Id == p.Id));
 
 			Parallel.Invoke
 			(
@@ -26,5 +27,8 @@ namespace ShopsDbEntities.Logic
 
 			Context.SaveChanges();
 		}
+
+		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
+			=> Products.WhereByExpression(p => idSet.Contains(p.Id));
 	}
 }

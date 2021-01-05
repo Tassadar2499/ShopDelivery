@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.OData;
 using ShopsDbEntities;
+using ShopsDbEntities.Logic;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,19 +8,16 @@ namespace ProductsWebApi.Controllers
 {
 	public class ProductsODataController : ODataController
 	{
-		private readonly ApplicationDbContext _context;
-
-		public ProductsODataController(ApplicationDbContext context)
-		{
-			_context = context;
-		}
+		private readonly ProductsLogic _logic;
+		private IQueryable<Product> Products => _logic.Products;
+		public ProductsODataController(ProductsLogic logic) => _logic = logic;
 
 		[EnableQuery]
 		public List<Product> Get()
-			=> _context.Products.ToList();
+			=> Products.ToList();
 
 		[EnableQuery]
 		public List<Product> Get([FromODataUri] int id)
-			=> _context.Products.Where(p => p.Id == id).ToList();
+			=> Products.Where(p => p.Id == id).ToList();
 	}
 }

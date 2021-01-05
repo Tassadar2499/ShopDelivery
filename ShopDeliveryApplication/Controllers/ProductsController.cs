@@ -24,19 +24,6 @@ namespace ShopDeliveryApplication.Controllers
 		}
 
 		public void AddToBucket(long productId)
-		{
-			var session = HttpContext.Session;
-			var productIdStr = productId.ToString();
-
-			var isSuccess = session.TryGetString(BucketController.BUCKET, out var bucketStr);
-			if (!isSuccess)
-			{
-				session.SetString(BucketController.BUCKET, productIdStr);
-				return;
-			}
-
-			bucketStr += $";{productIdStr}";
-			session.SetString(BucketController.BUCKET, bucketStr);
-		}
+			=> HttpContext.Session.AddIdToString(BucketController.BUCKET, productId.ToString());
 	}
 }

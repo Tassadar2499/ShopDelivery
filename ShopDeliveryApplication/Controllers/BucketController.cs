@@ -2,29 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using ShopDeliveryApplication.Models;
 using ShopsDbEntities;
-using ShopsDbEntities.Utils;
+using ShopsDbEntities.Logic;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Controllers
 {
-	public class BucketController : CatalogController
+	public class BucketController : Controller
 	{
 		public const string BUCKET = "bucket";
+		private readonly ProductsLogic _logic;
 
-		public BucketController(ApplicationDbContext context) : base(context)
-		{
-		}
+		public BucketController(ProductsLogic context) => _logic = context;
 
 		public IActionResult Index()
 		{
-			var isSuccess = HttpContext.Session.TryGetString(BUCKET, out var bucketStrId);
-			if (!isSuccess || string.IsNullOrEmpty(bucketStrId))
-				return View(new Product[] { });
+			var isSuccess = HttpContext.Session.TryGetIdSetByKey(BUCKET, out var productsIdSet);
 
-			var productsIdSet = bucketStrId.Split(';').Select(long.Parse).ToHashSet();
-			var products = _context.Products
-				.WhereByExpression(p => productsIdSet.Contains(p.Id))
-				.ToArray();
+			var products = isSuccess
+				? _logic.GetProductsByIdSet(productsIdSet).ToArray()
+				: new Product[] { };
 
 			return View(products);
 		}

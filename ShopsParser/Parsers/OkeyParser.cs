@@ -53,8 +53,6 @@ namespace ShopsParser.Parsers
 
 			Task.WaitAll(productNameTask, priceTask, weightTask, imageUrlTask);
 
-			var category = productCategoryTask.Result;
-
 			return new Product()
 			{
 				ShopType = ShopType.Okey,
@@ -85,7 +83,7 @@ namespace ShopsParser.Parsers
 				: _subategories[categoriesKey];
 		}
 
-		private string GetProductName(IElement element)
+		private static string GetProductName(IElement element)
 		{
 			var productNameElement = element.GetElementsByClassName("product-name").SingleOrDefault();
 			var anchorElement = productNameElement.GetElementsByTagName("a").SingleOrDefault();
@@ -93,7 +91,7 @@ namespace ShopsParser.Parsers
 			return anchorElement.GetAttribute("title");
 		}
 
-		private float? GetWeight(IElement element)
+		private static float? GetWeight(IElement element)
 		{
 			var weightElement = element.GetElementsByClassName("product-weight").SingleOrDefault();
 			var weight = FilterTextContent(weightElement.TextContent).Replace("кг", "");
@@ -103,7 +101,7 @@ namespace ShopsParser.Parsers
 				: null;
 		}
 
-		private float GetPrice(IElement element)
+		private static float GetPrice(IElement element)
 		{
 			var priceElement = element.GetElementsByClassName("product-price").FirstOrDefault();
 
@@ -113,7 +111,7 @@ namespace ShopsParser.Parsers
 			return float.Parse(priceText);
 		}
 
-		private string GetImageUrl(IElement element)
+		private static string GetImageUrl(IElement element)
 		{
 			var imageDivElement = element.GetElementsByClassName("image").SingleOrDefault();
 			var imageElement = imageDivElement.GetElementsByTagName("img").SingleOrDefault() as IHtmlImageElement;
@@ -122,7 +120,7 @@ namespace ShopsParser.Parsers
 			return $"{element.BaseUrl.Origin}/{src}";
 		}
 
-		private string FilterTextContent(string str)
+		private static string FilterTextContent(string str)
 			=> str.Replace("\t", "").Replace("\n", "").Replace(" ", "");
 	}
 }

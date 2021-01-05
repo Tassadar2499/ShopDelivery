@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using ShopsDbEntities;
 using ShopsParser.Parsers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Shop = ShopsParser.Settings.Shop;
@@ -32,9 +33,13 @@ namespace ShopsParser
 
 		private ParallelQuery<Product> GetProductsByUrl(string shopName, string url)
 		{
+			var isSuccess = _shopParsers.TryGetValue(shopName, out var shopParser);
+			if (!isSuccess)
+				throw new Exception($"Не удалось извлечь парсер по названию магазина - {shopName}");
+
 			var document = _context.OpenAsync(url).Result;
 
-			return _shopParsers[shopName].GetProducts(document);
+			return shopParser.GetProducts(document);
 		}
 	}
 }
