@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShopsDbEntities;
+using ShopsDbEntities.Logic;
 
 namespace ShopDeliveryApplication
 {
@@ -23,7 +24,9 @@ namespace ShopDeliveryApplication
 			services.AddDistributedMemoryCache();
 			services.AddSession();
 
-			string connection = Configuration.GetConnectionString("DefaultConnection");
+			services.AddScoped<ProductsLogic>();
+
+			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 
 			services.AddControllersWithViews();
@@ -52,7 +55,7 @@ namespace ShopDeliveryApplication
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
+					pattern: "{controller=Shops}/{action=Index}/{id?}");
 			});
 		}
 	}

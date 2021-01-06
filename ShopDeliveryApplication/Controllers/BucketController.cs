@@ -11,9 +11,7 @@ namespace ShopDeliveryApplication.Controllers
 	{
 		public const string BUCKET = "bucket";
 		private readonly ProductsLogic _logic;
-
 		public BucketController(ProductsLogic context) => _logic = context;
-
 		public IActionResult Index()
 		{
 			var isSuccess = HttpContext.Session.TryGetIdSetByKey(BUCKET, out var productsIdSet);
