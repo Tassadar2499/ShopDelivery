@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShopDeliveryApplication.Models;
 using ShopsDbEntities;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Controllers
@@ -16,5 +18,9 @@ namespace ShopDeliveryApplication.Controllers
 
 			return View(shops);
 		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+			=> View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 	}
 }

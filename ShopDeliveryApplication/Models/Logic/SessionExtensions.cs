@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Models
@@ -14,12 +13,12 @@ namespace ShopDeliveryApplication.Models
 			session.SetString(key, strValue);
 		}
 
-		public static bool TryGetIdSetByKey(this ISession session, string key, out HashSet<long> idSet)
+		public static bool TryGetIdArrByKey(this ISession session, string key, out long[] idArr)
 		{
 			var isSuccess = session.TryGetString(key, out var idStr);
 
-			idSet = isSuccess
-				? idStr.Split(';').Select(long.Parse).ToHashSet()
+			idArr = isSuccess
+				? idStr.Split(';').Select(long.Parse).ToArray()
 				: null;
 
 			return isSuccess;

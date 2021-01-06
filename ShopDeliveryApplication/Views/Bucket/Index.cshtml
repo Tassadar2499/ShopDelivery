@@ -1,6 +1,6 @@
-﻿@using ShopsDbEntities
+﻿@using ShopDeliveryApplication.Models.Entities;
 
-@model Product[]
+@model BucketProduct[]
 @{
 	ViewData["Title"] = "Bucket";
 }
@@ -14,5 +14,6 @@
 		<img src="@product.ImageUrl" />
 		<p>@product.Price</p>
 		<p>@product.Mass кг</p>
+		<p>Количество: @product.Count</p>
 	</div>
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities;
 using ShopsDbEntities.Logic;
 
@@ -25,6 +26,7 @@ namespace ShopDeliveryApplication
 			services.AddSession();
 
 			services.AddScoped<ProductsLogic>();
+			services.AddScoped<BucketLogic>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
@@ -41,7 +43,7 @@ namespace ShopDeliveryApplication
 			}
 			else
 			{
-				app.UseExceptionHandler("/Home/Error");
+				app.UseExceptionHandler("/Shops/Error");
 			}
 
 			app.UseSession();
