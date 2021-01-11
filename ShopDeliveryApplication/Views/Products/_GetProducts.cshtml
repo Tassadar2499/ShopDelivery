@@ -1,0 +1,21 @@
+﻿@using ShopDeliveryApplication.Models.Entities
+
+@model BucketProduct[]
+@{
+	ViewData["Title"] = "Products";
+}
+
+<h1>Продукты</h1>
+
+@foreach (var product in Model)
+{
+	<div>
+		<p>@product.Name</p>
+		<img src="@product.ImageUrl" />
+		<p>@product.Price</p>
+		<p>@product.Mass кг</p>
+		<button class="btn btn-success" onclick="addProductToBucket(@product.Id)">Добавить</button>
+		<button class="btn btn-success">Удалить</button>
+		<p>Количество: @product.Count</p>
+	</div>
+}

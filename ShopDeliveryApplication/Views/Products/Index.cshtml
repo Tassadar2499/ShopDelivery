@@ -1,29 +1,20 @@
-﻿@using ShopsDbEntities
+﻿@using ShopDeliveryApplication.Models.Entities
 
-@model Product[]
+@model BucketProduct[]
 @{
 	ViewData["Title"] = "Products";
 }
 
 <h1>Продукты</h1>
 
-@foreach (var product in Model)
-{
-	<div>
-		<p>@product.Name</p>
-		<img src="@product.ImageUrl" />
-		<p>@product.Price</p>
-		<p>@product.Mass кг</p>
-		<button class="btn btn-success" onclick="addProductToBucket(@product.Id)">Добавить</button>
-	</div>
-}
+@{ await Html.RenderPartialAsync("_GetProducts", Model); }
 
 <script type="text/javascript">
-    function addProductToBucket(id) {
+	function addProductToBucket(id) {
 		$.ajax({
 			type: "GET",
 			url: "Products/AddToBucket",
 			data: { "productId": id },
 		});
-    }
+	}
 </script>

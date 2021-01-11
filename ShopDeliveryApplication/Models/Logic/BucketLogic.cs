@@ -1,4 +1,6 @@
-﻿using ShopDeliveryApplication.Models.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using ShopDeliveryApplication.Models.Entities;
+using ShopsDbEntities;
 using ShopsDbEntities.Logic;
 using System.Linq;
 
@@ -6,9 +8,25 @@ namespace ShopDeliveryApplication.Models.Logic
 {
 	public class BucketLogic
 	{
+		public const string BUCKET = "bucket";
+
+		public ApplicationDbContext Context { get; }
 		private readonly ProductsLogic _logic;
 
-		public BucketLogic(ProductsLogic logic) => _logic = logic;
+		public BucketLogic(ProductsLogic logic)
+		{
+			_logic = logic;
+			Context = _logic.Context;
+		}
+
+		public BucketProduct[] GetBucketProductsBySession(ISession session)
+		{
+			var isSuccess = session.TryGetIdArrByKey(BUCKET, out var productsIdArr);
+
+			return isSuccess
+				? GetBucketProductsByIdArr(productsIdArr)
+				: new BucketProduct[] { };
+		}
 
 		public BucketProduct[] GetBucketProductsByIdArr(long[] productsIdArr)
 		{

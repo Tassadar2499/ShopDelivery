@@ -5,6 +5,7 @@ namespace ShopDeliveryApplication.Models.Entities
 	public class BucketProduct
 	{
 		public Product Product { get; }
+		public long Id => Product.Id;
 		public string Name => Product.Name;
 		public string ImageUrl => Product.ImageUrl;
 		public float Price => Product.Price;
