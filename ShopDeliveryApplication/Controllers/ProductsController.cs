@@ -23,11 +23,6 @@ namespace ShopDeliveryApplication.Controllers
 		public void AddToBucket(long productId)
 		{
 			HttpContext.Session.AddIdToString(BucketController.BUCKET, productId.ToString());
-			//HttpContext.Request.Query.TryGetValue("shopId", out var shopId);
-			//HttpContext.Request.Query.TryGetValue("sategoryId", out var categoryId);
-			//HttpContext.Request.Query.TryGetValue("subCategoryId", out var subCategoryId);
-			//
-			//var products = GetProducts(byte.Parse(shopId.Single()), byte.Parse(categoryId.Single()), byte.Parse(subCategoryId.Single()));
 		}
 
 		public BucketProduct[] GetProducts(byte shopId, byte categoryId, byte subCategoryId)
