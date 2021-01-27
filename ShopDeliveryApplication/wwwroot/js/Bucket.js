@@ -32,6 +32,18 @@ var Bucket = /** @class */ (function () {
             element.textContent = 'Количество: ' + Bucket.getCountOfProducts(id);
         }
     };
+    Bucket.updateBucketBtn = function () {
+        var element = document.getElementById('bucket-btn');
+        var idArr = Bucket.getProductsIdArr();
+        element.setAttribute('href', '/Bucket?idArr=' + JSON.stringify(idArr));
+    };
+    Bucket.getProductsIdArr = function () {
+        var bucket = localStorage.getItem(Bucket.BucketKey);
+        if (bucket == null)
+            return null;
+        var idArr = JSON.parse(bucket);
+        return idArr;
+    };
     Bucket.updateElementById = function (idArr, id) {
         var element = Bucket.findElementByNumber(id);
         element.textContent = 'Количество: ' + Bucket.getCountOfId(idArr, id);

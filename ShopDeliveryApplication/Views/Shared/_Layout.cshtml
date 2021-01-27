@@ -20,7 +20,15 @@
 				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Bucket" asp-action="Index">Корзина</a>
+							<a id="bucket-btn" 
+							   class="nav-link text-dark"
+							   onclick="Bucket.updateBucketBtn()"
+							   @*asp-area=""
+							   asp-route-productsIdArr=""
+							   asp-controller="Bucket"
+							   asp-action="Index"*@>
+								Корзина
+							</a>
 						</li>
 					</ul>
 				</div>
@@ -42,6 +50,7 @@
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="~/js/app.js"></script>
+	<script src="~/js/bucket.js"></script>
 	@RenderSection("Scripts", required: false)
 </body>
 </html>
