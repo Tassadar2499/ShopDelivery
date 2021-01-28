@@ -11,27 +11,24 @@ namespace ShopDeliveryApplication.Controllers
 	public class BucketController : Controller
 	{
 		public const string BUCKET = "bucket";
-		private readonly ProductsLogic _logic;
+		private readonly BucketLogic _logic;
 
-		public BucketController(ProductsLogic logic) => _logic = logic;
+		public BucketController(BucketLogic logic) => _logic = logic;
 
-		public IActionResult Index(string idArr)
+		public IActionResult Index()
 		{
-			var idSet = idArr
-				.Replace("[", "")
-				.Replace("]", "")
-				.Split(',')
-				.Select(int.Parse)
-				.ToHashSet();
+			var products = _logic.GetBucketProductsBySession(HttpContext.Session);
 
-			//var isSuccess = HttpContext.Session.TryGetIdArrByKey(BUCKET, out var productsIdArr);
+			return View(products);
+		}
 
-			//var bucketProducts = isSuccess
-			//	? _logic.GetBucketProductsByIdArr(productsIdArr)
-			//	: new BucketProduct[] { };
+		[HttpPost]
+		public IActionResult SaveBucketToSession(string content)
+		{
+			HttpContext.Session.SetString(BUCKET, content ?? "");
 
-			//return View(bucketProducts);
-			return View();
+			//return new RedirectToActionResult("Index", "Bucket", null);
+			return new EmptyResult();
 		}
 	}
 }

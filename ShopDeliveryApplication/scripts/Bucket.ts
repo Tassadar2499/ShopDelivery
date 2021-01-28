@@ -39,10 +39,21 @@
 		}
 	}
 
-	public static updateBucketBtn() {
-		const element = document.getElementById('bucket-btn');
-		const idArr: number[] = Bucket.getProductsIdArr();
-		element.setAttribute('href', '/Bucket?idArr=' + JSON.stringify(idArr));
+	public static goToBucketPage() {
+		$.ajax({
+			method: 'POST',
+			url: 'Bucket/SaveBucketToSession/',
+			data: {
+				content: localStorage.getItem(Bucket.BucketKey)
+			},
+			success: Bucket.redirectToBucketPage
+		});
+	}
+
+	private static redirectToBucketPage() {
+		let linkParts = location.href.split('/');
+		let mainPartLink = linkParts[0] + '//' + linkParts[2];
+		location.href = mainPartLink + '/Bucket';
 	}
 
 	private static getProductsIdArr(): number[] {

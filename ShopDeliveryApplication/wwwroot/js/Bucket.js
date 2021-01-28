@@ -32,10 +32,20 @@ var Bucket = /** @class */ (function () {
             element.textContent = 'Количество: ' + Bucket.getCountOfProducts(id);
         }
     };
-    Bucket.updateBucketBtn = function () {
-        var element = document.getElementById('bucket-btn');
-        var idArr = Bucket.getProductsIdArr();
-        element.setAttribute('href', '/Bucket?idArr=' + JSON.stringify(idArr));
+    Bucket.goToBucketPage = function () {
+        $.ajax({
+            method: 'POST',
+            url: 'Bucket/SaveBucketToSession/',
+            data: {
+                content: localStorage.getItem(Bucket.BucketKey)
+            },
+            success: Bucket.redirectToBucketPage
+        });
+    };
+    Bucket.redirectToBucketPage = function () {
+        var linkParts = location.href.split('/');
+        var mainPartLink = linkParts[0] + '//' + linkParts[2];
+        location.href = mainPartLink + '/Bucket';
     };
     Bucket.getProductsIdArr = function () {
         var bucket = localStorage.getItem(Bucket.BucketKey);

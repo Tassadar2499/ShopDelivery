@@ -2,6 +2,7 @@
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities;
 using ShopsDbEntities.Logic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Models.Logic
@@ -28,7 +29,7 @@ namespace ShopDeliveryApplication.Models.Logic
 				: new BucketProduct[] { };
 		}
 
-		public BucketProduct[] GetBucketProductsByIdArr(long[] productsIdArr)
+		private BucketProduct[] GetBucketProductsByIdArr(long[] productsIdArr)
 		{
 			var productsIdSet = productsIdArr.ToHashSet();
 
