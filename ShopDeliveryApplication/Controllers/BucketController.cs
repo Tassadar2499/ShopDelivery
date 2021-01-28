@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ShopDeliveryApplication.Models;
-using ShopDeliveryApplication.Models.Entities;
 using ShopDeliveryApplication.Models.Logic;
-using ShopsDbEntities.Logic;
-using System.Linq;
 
 namespace ShopDeliveryApplication.Controllers
 {
@@ -27,7 +23,6 @@ namespace ShopDeliveryApplication.Controllers
 		{
 			HttpContext.Session.SetString(BUCKET, content ?? "");
 
-			//return new RedirectToActionResult("Index", "Bucket", null);
 			return new EmptyResult();
 		}
 	}

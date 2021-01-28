@@ -1,13 +1,4 @@
-﻿@using ShopDeliveryApplication.Models.Entities
-
-@model BucketProduct[]
-@{
-	ViewData["Title"] = "Products";
-}
-
-<h1>Продукты</h1>
-
-@foreach (var product in Model)
+﻿@foreach (var product in Model)
 {
 	<div>
 		<p>@product.Name</p>

@@ -2,7 +2,6 @@
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities;
 using ShopsDbEntities.Logic;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Models.Logic

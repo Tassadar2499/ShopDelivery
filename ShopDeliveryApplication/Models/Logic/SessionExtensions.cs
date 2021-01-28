@@ -1,19 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ShopDeliveryApplication.Models
 {
 	public static class SessionExtensions
 	{
-		public static void AddIdToString(this ISession session, string key, string id)
-		{
-			var isSuccess = session.TryGetString(key, out var idStr);
-			var strValue = !isSuccess ? id : idStr + $";{id}";
-			session.SetString(key, strValue);
-		}
-
 		public static bool TryGetIdArrByKey(this ISession session, string key, out long[] idArr)
 		{
 			var isSuccess = session.TryGetString(key, out var idStr);

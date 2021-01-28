@@ -9,7 +9,6 @@ namespace ShopsDbEntities.Logic
 	{
 		public ApplicationDbContext Context { get; }
 		public IQueryable<Product> Products => Context.Products;
-
 		public ProductsLogic(ApplicationDbContext context) => Context = context;
 
 		public async Task CreateOrUpdateProductsAsync(IEnumerable<Product> products)
@@ -30,5 +29,12 @@ namespace ShopsDbEntities.Logic
 
 		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
 			=> Products.WhereByExpression(p => idSet.Contains(p.Id));
+
+		public Product[] GetCatalogProducts(byte shopId, byte categoryId, byte subCategoryId)
+			=> Products
+				.Where(p => (byte)p.ShopType == shopId)
+				.Where(p => (byte)p.Category == categoryId)
+				.Where(p => (byte)p.SubCategory == subCategoryId)
+				.ToArray();
 	}
 }

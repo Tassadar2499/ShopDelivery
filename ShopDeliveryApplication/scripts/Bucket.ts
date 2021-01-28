@@ -2,7 +2,6 @@
 	public static readonly BucketKey: string = "bucket";
 
 	public static addProductId(id: number) {
-		
 		const bucket = localStorage.getItem(Bucket.BucketKey);
 		let idArr: number[];
 		if (bucket == null) {
