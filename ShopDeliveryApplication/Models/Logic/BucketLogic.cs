@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities;
+using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.Logic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
 {
@@ -10,13 +12,25 @@ namespace ShopDeliveryApplication.Models.Logic
 	{
 		public const string BUCKET = "bucket";
 
-		public ApplicationDbContext Context { get; }
-		private readonly ProductsLogic _logic;
-
-		public BucketLogic(ProductsLogic logic)
+		private readonly ProductsLogic _productsLogic;
+		private readonly OrdersLogic _ordersLogic;
+		private readonly MessageHandler _messageHandler;
+		public BucketLogic(ProductsLogic productLogic, OrdersLogic ordersLogic, MessageHandler messageHandler)
 		{
-			_logic = logic;
-			Context = _logic.Context;
+			_productsLogic = productLogic;
+			_ordersLogic = ordersLogic;
+			_messageHandler = messageHandler;
+		}
+
+		public async Task SendOrderAsync(string idArrStr)
+		{
+			var order = new Order()
+			{
+				BucketProducts = idArrStr
+			};
+
+			await _ordersLogic.Context.CreateAndSaveAsync(order);
+			await _messageHandler.QueueClient.SendMessageAsync(order.Id.ToString());
 		}
 
 		public BucketProduct[] GetBucketProductsBySession(ISession session)
@@ -32,7 +46,7 @@ namespace ShopDeliveryApplication.Models.Logic
 		{
 			var productsIdSet = productsIdArr.ToHashSet();
 
-			return _logic.GetProductsByIdSet(productsIdSet)
+			return _productsLogic.GetProductsByIdSet(productsIdSet)
 					.AsEnumerable()
 					.Select(p => (Product: p, Count: productsIdArr.Count(id => p.Id == id)))
 					.Select(t => new BucketProduct(t.Product, t.Count))

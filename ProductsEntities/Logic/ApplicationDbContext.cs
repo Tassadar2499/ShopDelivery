@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.ShopsEntities;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace ShopsDbEntities
 		public DbSet<Product> Products { get; set; }
 		public DbSet<ProductDbCategory> ProductCategories { get; set; }
 		public DbSet<ProductDbSubCategory> ProductSubCategories { get; set; }
+		public DbSet<Order> Orders { get; set; }
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options) => Database.EnsureCreated();

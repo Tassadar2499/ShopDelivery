@@ -7,6 +7,10 @@
 
 <h1>Корзина</h1>
 
+<form asp-action="SendOrder">
+	<button class="btn btn-success">Отправить</button>
+</form>
+
 @foreach (var product in Model)
 {
 	<div>

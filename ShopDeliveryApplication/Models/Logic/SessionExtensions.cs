@@ -21,7 +21,7 @@ namespace ShopDeliveryApplication.Models
 			return isSuccess;
 		}
 
-		private static bool TryGetString(this ISession session, string key, out string value)
+		public static bool TryGetString(this ISession session, string key, out string value)
 		{
 			value = null;
 			if (!session.Keys.Contains(key))

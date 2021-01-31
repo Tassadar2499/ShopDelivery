@@ -27,6 +27,8 @@ namespace ShopDeliveryApplication
 
 			services.AddScoped<ProductsLogic>();
 			services.AddScoped<BucketLogic>();
+			services.AddScoped<OrdersLogic>();
+			services.AddSingleton<MessageHandler>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
