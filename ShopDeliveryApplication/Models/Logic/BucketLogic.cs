@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
@@ -30,7 +31,7 @@ namespace ShopDeliveryApplication.Models.Logic
 			};
 
 			await _ordersLogic.Context.CreateAndSaveAsync(order);
-			await _messageHandler.QueueClient.SendMessageAsync(order.Id.ToString());
+			await _messageHandler.QueueClient.SendMessageAsync(JsonConvert.SerializeObject(order));
 		}
 
 		public BucketProduct[] GetBucketProductsBySession(ISession session)
