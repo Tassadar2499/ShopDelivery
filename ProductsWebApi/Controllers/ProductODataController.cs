@@ -10,6 +10,7 @@ namespace ProductsWebApi.Controllers
 	{
 		private readonly ProductsLogic _logic;
 		private IQueryable<Product> Products => _logic.Products;
+
 		public ProductsODataController(ProductsLogic logic) => _logic = logic;
 
 		[EnableQuery]

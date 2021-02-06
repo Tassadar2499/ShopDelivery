@@ -1,13 +1,13 @@
 {
-  "dependencies": {
-    "appInsights1": {
-      "type": "appInsights.sdk"
-    },
-    "storage1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/productordersacc",
-      "type": "storage.azure",
-      "connectionId": "AzureWebJobsStorage",
-      "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=productordersacc;AccountKey=ubmfUgb8XcXYWZNIWHbqJHPnzeZfCWpyjy5Bfc/tO8daCcmpCMlyqxDDrJ5A2wHHkPoYO+Lh+n3i6vaTZuyBsw==;BlobEndpoint=https://productordersacc.blob.core.windows.net/;TableEndpoint=https://productordersacc.table.core.windows.net/;QueueEndpoint=https://productordersacc.queue.core.windows.net/;FileEndpoint=https://productordersacc.file.core.windows.net/"
-    }
-  }
+	"dependencies": {
+		"appInsights1": {
+			"type": "appInsights.sdk"
+		},
+		"storage1": {
+			"resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/productordersacc",
+			"type": "storage.azure",
+			"connectionId": "AzureWebJobsStorage",
+			"AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=productordersacc;AccountKey=ubmfUgb8XcXYWZNIWHbqJHPnzeZfCWpyjy5Bfc/tO8daCcmpCMlyqxDDrJ5A2wHHkPoYO+Lh+n3i6vaTZuyBsw==;BlobEndpoint=https://productordersacc.blob.core.windows.net/;TableEndpoint=https://productordersacc.table.core.windows.net/;QueueEndpoint=https://productordersacc.queue.core.windows.net/;FileEndpoint=https://productordersacc.file.core.windows.net/"
+		}
+	}
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using ShopDeliveryApplication.Models.Entities;
-using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.Logic;
 using System.Linq;
@@ -16,6 +15,7 @@ namespace ShopDeliveryApplication.Models.Logic
 		private readonly ProductsLogic _productsLogic;
 		private readonly OrdersLogic _ordersLogic;
 		private readonly MessageHandler _messageHandler;
+
 		public BucketLogic(ProductsLogic productLogic, OrdersLogic ordersLogic, MessageHandler messageHandler)
 		{
 			_productsLogic = productLogic;
