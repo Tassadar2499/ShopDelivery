@@ -55,16 +55,6 @@
 		location.href = mainPartLink + '/Bucket';
 	}
 
-	private static getProductsIdArr(): number[] {
-		const bucket = localStorage.getItem(Bucket.BucketKey);
-		if (bucket == null)
-			return null;
-
-		const idArr: number[] = JSON.parse(bucket);
-
-		return idArr;
-	}
-
 	private static updateElementById(idArr: number[], id: number) {
 		const element = Bucket.findElementByNumber(id);
 		element.textContent = 'Количество: ' + Bucket.getCountOfId(idArr, id);

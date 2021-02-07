@@ -47,13 +47,6 @@ var Bucket = /** @class */ (function () {
         var mainPartLink = linkParts[0] + '//' + linkParts[2];
         location.href = mainPartLink + '/Bucket';
     };
-    Bucket.getProductsIdArr = function () {
-        var bucket = localStorage.getItem(Bucket.BucketKey);
-        if (bucket == null)
-            return null;
-        var idArr = JSON.parse(bucket);
-        return idArr;
-    };
     Bucket.updateElementById = function (idArr, id) {
         var element = Bucket.findElementByNumber(id);
         element.textContent = 'Количество: ' + Bucket.getCountOfId(idArr, id);
@@ -85,4 +78,4 @@ var Bucket = /** @class */ (function () {
     Bucket.BucketKey = "bucket";
     return Bucket;
 }());
-//# sourceMappingURL=bucket.js.map
+//# sourceMappingURL=Bucket.js.map
