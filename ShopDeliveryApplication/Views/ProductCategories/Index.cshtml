@@ -1,17 +1,6 @@
 ﻿@using ShopsDbEntities
-
 @model ProductDbCategory[]
 
 <h1>Категории</h1>
 
-@foreach (var category in Model)
-{
-	<div>
-		<p>@category.Name</p>
-		<a asp-controller="ProductSubCategories"
-		   asp-route-shopId="@ViewData["ShopId"]"
-		   asp-route-categoryId="@category.Id">
-			<img src="@category.ImgUrl" />
-		</a>
-	</div>
-}
+@{ await Html.RenderPartialAsync("_GetCategories", Model); }

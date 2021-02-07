@@ -1,4 +1,7 @@
-﻿@foreach (var product in Model)
+﻿@using ShopsDbEntities
+@model Product[]
+
+@foreach (var product in Model)
 {
 	<div>
 		<p>@product.Name</p>

@@ -1,0 +1,15 @@
+﻿@using ShopsDbEntities
+@model ProductDbSubCategory[]
+
+@foreach (var subCategory in Model)
+{
+	<div>
+		<p>@subCategory.Name</p>
+		<a asp-controller="Products"
+		   asp-route-shopId="@ViewData["ShopId"]"
+		   asp-route-categoryId="@ViewData["CategoryId"]"
+		   asp-route-subCategoryId="@subCategory.Id">
+			<img src="@subCategory.ImgUrl" />
+		</a>
+	</div>
+}

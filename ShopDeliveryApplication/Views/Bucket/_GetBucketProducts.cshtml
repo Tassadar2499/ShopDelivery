@@ -1,0 +1,13 @@
+﻿@using ShopDeliveryApplication.Models.Entities;
+@model BucketProduct[]
+
+@foreach (var product in Model)
+{
+	<div>
+		<p>@product.Name</p>
+		<img src="@product.ImageUrl" />
+		<p>@product.Price</p>
+		<p>@product.Mass кг</p>
+		<p>Количество: @product.Count</p>
+	</div>
+}

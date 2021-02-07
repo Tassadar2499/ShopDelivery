@@ -1,5 +1,4 @@
 ﻿@using ShopDeliveryApplication.Models.Entities;
-
 @model BucketProduct[]
 
 <h1>Корзина</h1>
@@ -8,13 +7,4 @@
 	<button class="btn btn-success">Отправить</button>
 </form>
 
-@foreach (var product in Model)
-{
-	<div>
-		<p>@product.Name</p>
-		<img src="@product.ImageUrl" />
-		<p>@product.Price</p>
-		<p>@product.Mass кг</p>
-		<p>Количество: @product.Count</p>
-	</div>
-}
+@{ await Html.RenderPartialAsync("_GetBucketProducts", Model); }
