@@ -12,8 +12,7 @@
 			idArr.push(id);
 		}
 
-		localStorage.setItem(Bucket.BucketKey, JSON.stringify(idArr));
-		Bucket.updateElementById(idArr, id);
+		Bucket.productItemUpdate(idArr, id);
 	}
 
 	public static removeProductId(id: number) {
@@ -25,15 +24,15 @@
 		const indexOfNumber = idArr.indexOf(id);
 		idArr.splice(indexOfNumber, 1);
 
-		localStorage.setItem(Bucket.BucketKey, JSON.stringify(idArr));
-		Bucket.updateElementById(idArr, id);
+		Bucket.productItemUpdate(idArr, id);
+
 	}
 
 	public static productsPageLoad() {
-		const elements = Bucket.getProductsCountElements();
+		const elements = Bucket.getProductCountElements();
 		for (let i = 0; i < elements.length; i++) {
 			const element = elements[i];
-			const id: number = Bucket.getNumberFromElement(element);
+			const id: number = Bucket.getIdFromElement(element);
 			element.textContent = 'Количество: ' + Bucket.getCountOfProducts(id);
 		}
 	}
@@ -45,36 +44,42 @@
 			data: {
 				content: localStorage.getItem(Bucket.BucketKey)
 			},
-			success: Bucket.redirectToBucketPage
+			success: () => location.href = '/Bucket'
 		});
 	}
 
-	private static redirectToBucketPage() {
-		let linkParts = location.href.split('/');
-		let mainPartLink = linkParts[0] + '//' + linkParts[2];
-		location.href = mainPartLink + '/Bucket';
+	private static productItemUpdate(idArr: number[], id: number) {
+		localStorage.setItem(Bucket.BucketKey, JSON.stringify(idArr));
+		Bucket.updateElementById(idArr, id);
 	}
 
 	private static updateElementById(idArr: number[], id: number) {
-		const element = Bucket.findElementByNumber(id);
+		const element = Bucket.findElementById(id);
+		if (element == null) {
+			console.error(`cannot find element by id = ${id}`);
+			return;
+		}
+
 		element.textContent = 'Количество: ' + Bucket.getCountOfId(idArr, id);
 	}
 
-	private static findElementByNumber(num: number): Element {
-		const elements = Bucket.getProductsCountElements();
+	private static findElementById(id: number): Element {
+
+		const elements = Bucket.getProductCountElements();
+
 		for (let i = 0; i < elements.length; i++) {
 			const element = elements[i];
-			if (num === Bucket.getNumberFromElement(element))
+			if (id === Bucket.getIdFromElement(element))
 				return element;
 		}
 	}
 
-	private static getProductsCountElements(): HTMLCollectionOf<Element> {
+	private static getProductCountElements(): HTMLCollectionOf<Element> {
 		return document.getElementsByClassName('product-count');
 	}
 
-	private static getNumberFromElement(element: Element): number {
-		return parseInt(element.getAttribute('number'))
+	private static getIdFromElement(element: Element): number {
+		return parseInt(element.getAttribute('productId'));
 	}
 
 	private static getCountOfProducts(id: number): number {
