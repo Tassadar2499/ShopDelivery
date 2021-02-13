@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities;
+using ShopsDbEntities.Entities;
 using ShopsDbEntities.Logic;
+using System;
 
 namespace ShopDeliveryApplication
 {
@@ -31,7 +34,12 @@ namespace ShopDeliveryApplication
 			services.AddSingleton<MessageHandler>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
-			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+			//void optionsAction(DbContextOptionsBuilder options) => options.UseSqlServer(connection);
+
+			services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connection));
+			//services.AddDbContext<UserDbContext>(optionsAction);
+
+			services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MainDbContext>();
 
 			services.AddControllersWithViews();
 		}
@@ -40,19 +48,16 @@ namespace ShopDeliveryApplication
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
-			{
 				app.UseDeveloperExceptionPage();
-			}
 			else
-			{
 				app.UseExceptionHandler("/Shops/Error");
-			}
 
 			app.UseSession();
 			app.UseStaticFiles();
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>

@@ -5,9 +5,9 @@ namespace ShopsDbEntities.Logic
 {
 	public class OrdersLogic
 	{
-		public ApplicationDbContext Context { get; }
+		public MainDbContext Context { get; }
 		public IQueryable<Order> Orders => Context.Orders;
 
-		public OrdersLogic(ApplicationDbContext context) => Context = context;
+		public OrdersLogic(MainDbContext context) => Context = context;
 	}
 }

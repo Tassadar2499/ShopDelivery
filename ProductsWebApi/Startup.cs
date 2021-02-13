@@ -27,7 +27,7 @@ namespace ProductsWebApi
 		public void ConfigureServices(IServiceCollection services)
 		{
 			string connection = Configuration.GetConnectionString("DefaultConnection");
-			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
 			services.AddScoped<ProductsLogic>();
 
 			services.AddOData();

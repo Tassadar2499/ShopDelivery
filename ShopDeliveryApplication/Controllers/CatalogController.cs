@@ -5,8 +5,8 @@ namespace ShopDeliveryApplication.Controllers
 {
 	public abstract class CatalogController : Controller
 	{
-		protected readonly ApplicationDbContext _context;
+		protected readonly MainDbContext _context;
 
-		protected CatalogController(ApplicationDbContext context) => _context = context;
+		protected CatalogController(MainDbContext context) => _context = context;
 	}
 }

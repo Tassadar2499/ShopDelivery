@@ -12,9 +12,9 @@ namespace ShopsDbEntities.Entities.ProductEntities
 		public long ClientId { get; set; }
 
 		[JsonProperty]
-		public string BucketProducts { get; set; }
+		public long AddressId { get; set; }
 
 		[JsonProperty]
-		public string Coords { get; set; }
+		public string BucketProducts { get; set; }
 	}
 }

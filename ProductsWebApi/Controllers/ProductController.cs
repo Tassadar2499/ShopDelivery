@@ -13,7 +13,7 @@ namespace ProductsWebApi.Controllers
 	public class ProductController : ControllerBase
 	{
 		private readonly ProductsLogic _logic;
-		private ApplicationDbContext Context => _logic.Context;
+		private MainDbContext Context => _logic.Context;
 		private IQueryable<Product> Products => _logic.Products;
 
 		public ProductController(ProductsLogic logic) => _logic = logic;

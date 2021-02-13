@@ -8,7 +8,7 @@ namespace ShopDeliveryApplication.Controllers
 {
 	public class ShopsController : CatalogController
 	{
-		public ShopsController(ApplicationDbContext context) : base(context)
+		public ShopsController(MainDbContext context) : base(context)
 		{
 		}
 

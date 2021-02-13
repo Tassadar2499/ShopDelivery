@@ -6,7 +6,7 @@ namespace ShopDeliveryApplication.Controllers
 {
 	public class ProductSubCategoriesController : CatalogController
 	{
-		public ProductSubCategoriesController(ApplicationDbContext context) : base(context)
+		public ProductSubCategoriesController(MainDbContext context) : base(context)
 		{
 		}
 

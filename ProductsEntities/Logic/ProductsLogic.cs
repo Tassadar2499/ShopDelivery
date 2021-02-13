@@ -7,10 +7,10 @@ namespace ShopsDbEntities.Logic
 {
 	public class ProductsLogic
 	{
-		public ApplicationDbContext Context { get; }
+		public MainDbContext Context { get; }
 		public IQueryable<Product> Products => Context.Products;
 
-		public ProductsLogic(ApplicationDbContext context) => Context = context;
+		public ProductsLogic(MainDbContext context) => Context = context;
 
 		public async Task CreateOrUpdateProductsAsync(IEnumerable<Product> products)
 			=> await Task.Run(() => CreateOrUpdateProducts(products));
