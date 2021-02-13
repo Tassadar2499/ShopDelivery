@@ -25,7 +25,6 @@
 		idArr.splice(indexOfNumber, 1);
 
 		Bucket.productItemUpdate(idArr, id);
-
 	}
 
 	public static productsPageLoad() {
@@ -64,7 +63,6 @@
 	}
 
 	private static findElementById(id: number): Element {
-
 		const elements = Bucket.getProductCountElements();
 
 		for (let i = 0; i < elements.length; i++) {

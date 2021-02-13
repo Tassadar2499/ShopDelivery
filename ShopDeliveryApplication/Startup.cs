@@ -9,7 +9,6 @@ using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using ShopsDbEntities.Logic;
-using System;
 
 namespace ShopDeliveryApplication
 {

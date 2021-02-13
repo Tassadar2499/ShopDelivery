@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShopsDbEntities.Entities.UsersInfo
+﻿namespace ShopsDbEntities.Entities.UsersInfo
 {
 	public class UsersAddress
 	{

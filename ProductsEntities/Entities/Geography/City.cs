@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShopsDbEntities.Entities.Geography
 {
@@ -10,6 +7,7 @@ namespace ShopsDbEntities.Entities.Geography
 	{
 		[JsonProperty]
 		public long Id { get; set; }
+
 		[JsonProperty]
 		public string Name { get; set; }
 	}
