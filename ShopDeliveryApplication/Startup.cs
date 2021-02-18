@@ -33,12 +33,8 @@ namespace ShopDeliveryApplication
 			services.AddSingleton<MessageHandler>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
-			//void optionsAction(DbContextOptionsBuilder options) => options.UseSqlServer(connection);
-
 			services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connection));
-			//services.AddDbContext<UserDbContext>(optionsAction);
-
-			services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MainDbContext>();
+			services.AddIdentity<User, IdentityRole>(SetIdentityOptions).AddEntityFrameworkStores<MainDbContext>();
 
 			services.AddControllersWithViews();
 		}
@@ -65,6 +61,17 @@ namespace ShopDeliveryApplication
 					name: "default",
 					pattern: "{controller=Shops}/{action=Index}/{id?}");
 			});
+		}
+
+		private static void SetIdentityOptions(IdentityOptions opts)
+		{
+			var password = opts.Password;
+
+			password.RequiredLength = 0;
+			password.RequireNonAlphanumeric = false;
+			password.RequireLowercase = false;
+			password.RequireUppercase = false;
+			password.RequireDigit = false;
 		}
 	}
 }

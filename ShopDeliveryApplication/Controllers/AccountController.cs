@@ -27,6 +27,14 @@ namespace ShopDeliveryApplication.Controllers
 				return View(registerData);
 
 			var email = registerData.Email;
+
+			var userExist = await UserManager.FindByEmailAsync(email);
+			if (userExist != null)
+			{
+				ModelState.AddModelError(string.Empty, "Данный email уже зарегистрирован");
+				return View(registerData);
+			}
+
 			var user = new User
 			{
 				Email = email,
