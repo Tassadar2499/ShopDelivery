@@ -17,6 +17,8 @@ namespace ShopDeliveryApplication.Controllers
 			SignInManager = signInManager;
 		}
 
+		#region Register
+
 		[HttpGet]
 		public IActionResult Register() => View();
 
@@ -31,7 +33,7 @@ namespace ShopDeliveryApplication.Controllers
 			var userExist = await UserManager.FindByEmailAsync(email);
 			if (userExist != null)
 			{
-				ModelState.AddModelError(string.Empty, "Данный email уже зарегистрирован");
+				ModelState.AddModelError(string.Empty, "Данный пользователь уже зарегистрирован");
 				return View(registerData);
 			}
 
@@ -47,7 +49,7 @@ namespace ShopDeliveryApplication.Controllers
 			{
 				await SignInManager.SignInAsync(user, false);
 
-				return RedirectToAction("Index", "Shops");
+				return RedirectToMain();
 			}
 			else
 			{
@@ -57,5 +59,56 @@ namespace ShopDeliveryApplication.Controllers
 
 			return View(registerData);
 		}
+
+		#endregion Register
+
+		#region Login
+
+		[HttpGet]
+		public IActionResult Login(string returnUrl = null) 
+			=> View(new LoginData { ReturnUrl = returnUrl });
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(LoginData loginData)
+		{
+			if (!ModelState.IsValid)
+				return View(loginData);
+
+			var result = await SignInManager.PasswordSignInAsync(loginData.Email, loginData.Password, loginData.RememberMe, false);
+
+			if (result.Succeeded)
+			{
+				var returnUrl = loginData.ReturnUrl;
+
+				return !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
+					? Redirect(returnUrl)
+					: RedirectToMain();
+			}
+			else
+			{
+				ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+			}
+
+			return View(loginData);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Logout()
+		{
+			await SignInManager.SignOutAsync();
+
+			return RedirectToMain();
+		}
+
+		#endregion Login
+
+		#region Utils
+
+		private IActionResult RedirectToMain()
+			=> RedirectToAction("Index", "Shops");
+
+		#endregion Utils
 	}
 }

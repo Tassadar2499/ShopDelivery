@@ -20,9 +20,18 @@
 				<a id="bucket-btn" class="nav-link text-dark" onclick="Bucket.goToBucketPage()">
 					Корзина
 				</a>
-				<a class="btn" asp-controller="Account" asp-action="Register">
-					Регистрация
-				</a>
+				@if(User.Identity.IsAuthenticated)
+				{
+					<p>@User.Identity.Name</p> 
+					<form method="post" asp-controller="Account" asp-action="Logout">
+						<input class="btn" type="submit" value="Выход" />
+					</form>
+				}
+				else
+				{
+					<a class="btn" asp-controller="Account" asp-action="Login">Вход</a>
+					<a class="btn" asp-controller="Account" asp-action="Register">Регистрация</a>
+				}
 			</div>
 		</nav>
 	</header>
