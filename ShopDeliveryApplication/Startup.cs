@@ -30,11 +30,15 @@ namespace ShopDeliveryApplication
 			services.AddScoped<ProductsLogic>();
 			services.AddScoped<BucketLogic>();
 			services.AddScoped<OrdersLogic>();
+
 			services.AddSingleton<MessageHandler>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connection));
-			services.AddIdentity<User, IdentityRole>(SetIdentityOptions).AddEntityFrameworkStores<MainDbContext>();
+
+			services.AddIdentity<User, IdentityRole>(SetIdentityOptions)
+				.AddEntityFrameworkStores<MainDbContext>()
+				.AddDefaultTokenProviders();
 
 			services.AddControllersWithViews();
 		}

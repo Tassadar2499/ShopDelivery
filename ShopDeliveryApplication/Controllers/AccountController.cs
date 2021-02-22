@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShopDeliveryApplication.Models.Entities;
+using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities.Entities;
 using System.Threading.Tasks;
 
@@ -37,19 +39,24 @@ namespace ShopDeliveryApplication.Controllers
 				return View(registerData);
 			}
 
-			var user = new User
-			{
-				Email = email,
-				UserName = email
-			};
+			var user = new User { Email = registerData.Email, UserName = registerData.Email };
 
 			var result = await UserManager.CreateAsync(user, registerData.Password);
-
 			if (result.Succeeded)
 			{
-				await SignInManager.SignInAsync(user, false);
+				var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
 
-				return RedirectToMain();
+				var urlValues = new { userId = user.Id, code };
+				var protocol = HttpContext.Request.Scheme;
+
+				var callbackUrl = Url.Action("ConfirmEmail", "Account", urlValues, protocol);
+
+				var emailService = new EmailService();
+				var message = $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>";
+
+				await emailService.SendEmailAsync(registerData.Email, "Confirm your account", message);
+
+				return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
 			}
 			else
 			{
@@ -75,20 +82,19 @@ namespace ShopDeliveryApplication.Controllers
 			if (!ModelState.IsValid)
 				return View(loginData);
 
+			var user = await UserManager.FindByNameAsync(loginData.Email);
+			if (user != null && !await UserManager.IsEmailConfirmedAsync(user))
+			{
+				ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
+
+				return View(loginData);
+			}
+
 			var result = await SignInManager.PasswordSignInAsync(loginData.Email, loginData.Password, loginData.RememberMe, false);
-
 			if (result.Succeeded)
-			{
-				var returnUrl = loginData.ReturnUrl;
-
-				return !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
-					? Redirect(returnUrl)
-					: RedirectToMain();
-			}
+				return RedirectToMain();
 			else
-			{
 				ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-			}
 
 			return View(loginData);
 		}
@@ -103,6 +109,28 @@ namespace ShopDeliveryApplication.Controllers
 		}
 
 		#endregion Login
+
+		#region Email
+
+		[HttpGet]
+		[AllowAnonymous]
+		public async Task<IActionResult> ConfirmEmail(string userId, string code)
+		{
+			if (userId == null || code == null)
+				return View("Error");
+
+			var user = await UserManager.FindByIdAsync(userId);
+			if (user == null)
+				return View("Error");
+
+			var result = await UserManager.ConfirmEmailAsync(user, code);
+
+			return result.Succeeded 
+				? RedirectToMain()
+				: View("Error");
+		}
+
+		#endregion Email
 
 		#region Utils
 
