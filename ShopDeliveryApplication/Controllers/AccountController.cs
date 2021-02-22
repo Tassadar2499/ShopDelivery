@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShopDeliveryApplication.Models.Entities;
+using ShopDeliveryApplication.Models.Entities.Authorize;
 using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities.Entities;
 using System.Threading.Tasks;
@@ -45,24 +46,17 @@ namespace ShopDeliveryApplication.Controllers
 			if (result.Succeeded)
 			{
 				var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-
-				var urlValues = new { userId = user.Id, code };
-				var protocol = HttpContext.Request.Scheme;
-
-				var callbackUrl = Url.Action("ConfirmEmail", "Account", urlValues, protocol);
+				var callbackUrl = CreateCallbackUrlASync(user, code, "ConfirmEmail");
+				var message = $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Подтвердить</a>";
 
 				var emailService = new EmailService();
-				var message = $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>";
-
 				await emailService.SendEmailAsync(registerData.Email, "Confirm your account", message);
 
 				return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
 			}
-			else
-			{
-				foreach (var error in result.Errors)
-					ModelState.AddModelError(string.Empty, error.Description);
-			}
+
+			foreach (var error in result.Errors)
+				ModelState.AddModelError(string.Empty, error.Description);
 
 			return View(registerData);
 		}
@@ -72,7 +66,7 @@ namespace ShopDeliveryApplication.Controllers
 		#region Login
 
 		[HttpGet]
-		public IActionResult Login(string returnUrl = null) 
+		public IActionResult Login(string returnUrl = null)
 			=> View(new LoginData { ReturnUrl = returnUrl });
 
 		[HttpPost]
@@ -125,17 +119,87 @@ namespace ShopDeliveryApplication.Controllers
 
 			var result = await UserManager.ConfirmEmailAsync(user, code);
 
-			return result.Succeeded 
+			return result.Succeeded
 				? RedirectToMain()
 				: View("Error");
 		}
 
 		#endregion Email
 
+		#region Forgot password
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ForgotPassword() => View();
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ForgotPassword(ForgotPassword forgotPasswordData)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await UserManager.FindByEmailAsync(forgotPasswordData.Email);
+				if (user == null || !await UserManager.IsEmailConfirmedAsync(user))
+					return View("ForgotPasswordConfirmation");
+
+				var code = await UserManager.GeneratePasswordResetTokenAsync(user);
+				var callbackUrl = CreateCallbackUrlASync(user, code, "ResetPassword");
+				var message = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>Сбросить пароль</a>";
+
+				var emailService = new EmailService();
+				await emailService.SendEmailAsync(forgotPasswordData.Email, "Reset Password", message);
+
+				return View("ForgotPasswordConfirmation");
+			}
+			return View(forgotPasswordData);
+		}
+
+		#endregion Forgot password
+
+		#region Reset password
+
+		[HttpGet]
+		[AllowAnonymous]
+		public IActionResult ResetPassword(string code = null)
+			=> code == null ? View("Error") : View();
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ResetPassword(ResetPassword resetPasswordData)
+		{
+			if (!ModelState.IsValid)
+				return View(resetPasswordData);
+
+			var user = await UserManager.FindByEmailAsync(resetPasswordData.Email);
+			if (user == null)
+				return View("ResetPasswordConfirmation");
+
+			var result = await UserManager.ResetPasswordAsync(user, resetPasswordData.Code, resetPasswordData.Password);
+			if (result.Succeeded)
+				return View("ResetPasswordConfirmation");
+
+			foreach (var error in result.Errors)
+				ModelState.AddModelError(string.Empty, error.Description);
+
+			return View(resetPasswordData);
+		}
+
+		#endregion Reset password
+
 		#region Utils
 
 		private IActionResult RedirectToMain()
 			=> RedirectToAction("Index", "Shops");
+
+		private string CreateCallbackUrlASync(User user, string code, string localAction)
+		{
+			var urlValues = new { userId = user.Id, code };
+			var protocol = HttpContext.Request.Scheme;
+
+			return Url.Action(localAction, "Account", urlValues, protocol);
+		}
 
 		#endregion Utils
 	}
