@@ -46,7 +46,7 @@ namespace ShopDeliveryApplication.Controllers
 			if (result.Succeeded)
 			{
 				var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-				var callbackUrl = CreateCallbackUrlASync(user, code, "ConfirmEmail");
+				var callbackUrl = CreateCallbackUrl(user, code, "ConfirmEmail");
 				var message = $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Подтвердить</a>";
 
 				var emailService = new EmailService();
@@ -144,7 +144,7 @@ namespace ShopDeliveryApplication.Controllers
 					return View("ForgotPasswordConfirmation");
 
 				var code = await UserManager.GeneratePasswordResetTokenAsync(user);
-				var callbackUrl = CreateCallbackUrlASync(user, code, "ResetPassword");
+				var callbackUrl = CreateCallbackUrl(user, code, "ResetPassword");
 				var message = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>Сбросить пароль</a>";
 
 				var emailService = new EmailService();
@@ -193,7 +193,7 @@ namespace ShopDeliveryApplication.Controllers
 		private IActionResult RedirectToMain()
 			=> RedirectToAction("Index", "Shops");
 
-		private string CreateCallbackUrlASync(User user, string code, string localAction)
+		private string CreateCallbackUrl(User user, string code, string localAction)
 		{
 			var urlValues = new { userId = user.Id, code };
 			var protocol = HttpContext.Request.Scheme;
