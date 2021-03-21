@@ -85,6 +85,7 @@ namespace ShopDeliveryApplication.Controllers
 			}
 
 			var result = await SignInManager.PasswordSignInAsync(loginData.Email, loginData.Password, loginData.RememberMe, false);
+
 			if (result.Succeeded)
 				return RedirectToMain();
 			else
@@ -137,22 +138,21 @@ namespace ShopDeliveryApplication.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> ForgotPassword(ForgotPassword forgotPasswordData)
 		{
-			if (ModelState.IsValid)
-			{
-				var user = await UserManager.FindByEmailAsync(forgotPasswordData.Email);
-				if (user == null || !await UserManager.IsEmailConfirmedAsync(user))
-					return View("ForgotPasswordConfirmation");
+			if (!ModelState.IsValid)
+				return View(forgotPasswordData);
 
-				var code = await UserManager.GeneratePasswordResetTokenAsync(user);
-				var callbackUrl = CreateCallbackUrl(user, code, "ResetPassword");
-				var message = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>Сбросить пароль</a>";
-
-				var emailService = new EmailService();
-				await emailService.SendEmailAsync(forgotPasswordData.Email, "Reset Password", message);
-
+			var user = await UserManager.FindByEmailAsync(forgotPasswordData.Email);
+			if (user == null || !await UserManager.IsEmailConfirmedAsync(user))
 				return View("ForgotPasswordConfirmation");
-			}
-			return View(forgotPasswordData);
+
+			var code = await UserManager.GeneratePasswordResetTokenAsync(user);
+			var callbackUrl = CreateCallbackUrl(user, code, "ResetPassword");
+			var message = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>Сбросить пароль</a>";
+
+			var emailService = new EmailService();
+			await emailService.SendEmailAsync(forgotPasswordData.Email, "Reset Password", message);
+
+			return View("ForgotPasswordConfirmation");
 		}
 
 		#endregion Forgot password
