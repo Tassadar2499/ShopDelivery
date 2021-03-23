@@ -22,8 +22,8 @@ namespace ProductsWebApi.Controllers
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
 			=> await _logic.CreateOrUpdateProductsAsync(productData.Products);
 
-		[HttpPost("create")]
-		public async Task CreateAsync(Product product)
+		[HttpPut("create")]
+		public async Task CreateAsync([FromBody] Product product)
 			=> await Context.CreateAndSaveAsync(product);
 
 		[HttpGet]

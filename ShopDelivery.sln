@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbEntities", "Products
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderQueueHandler", "OrderQueueHandler\OrderQueueHandler.csproj", "{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderQueueHandler", "OrderQueueHandler\OrderQueueHandler.csproj", "{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourierService", "CourierService\CourierService.csproj", "{574644AF-044C-47CD-A81F-8BF4668C875A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{574644AF-044C-47CD-A81F-8BF4668C875A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{574644AF-044C-47CD-A81F-8BF4668C875A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{574644AF-044C-47CD-A81F-8BF4668C875A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{574644AF-044C-47CD-A81F-8BF4668C875A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
