@@ -1,17 +1,30 @@
-﻿using Azure.Storage.Queues;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using ShopsDbEntities.Entities.ProductEntities;
+using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
 {
 	public class MessageHandler
 	{
-		private const string QUEUE_NAME = "product-orders-queue";
-		public QueueClient QueueClient { get; }
+		private const string QUEUE_NAME = "created_orders";
+
+		private readonly string _connectionString = "";
 
 		public MessageHandler(IConfiguration configuration)
 		{
-			var connection = configuration.GetConnectionString("MessageQueueConnection");
-			QueueClient = new QueueClient(connection, QUEUE_NAME);
+			_connectionString = configuration.GetConnectionString("OrdersServiceBus");
+		}
+
+		public async Task SendActiveOrderMessageAsync(Order order)
+		{
+			await using var client = new ServiceBusClient(_connectionString);
+			var sender = client.CreateSender(QUEUE_NAME);
+			var text = JsonConvert.SerializeObject(order);
+			var message = new ServiceBusMessage(text);
+			await sender.SendMessageAsync(message);
 		}
 	}
 }

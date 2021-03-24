@@ -31,7 +31,7 @@ namespace ShopDeliveryApplication.Models.Logic
 			};
 
 			await _ordersLogic.Context.CreateAndSaveAsync(order);
-			await _messageHandler.QueueClient.SendMessageAsync(JsonConvert.SerializeObject(order));
+			await _messageHandler.SendActiveOrderMessageAsync(order);
 		}
 
 		public BucketProduct[] GetBucketProductsBySession(ISession session)
