@@ -9,10 +9,7 @@ namespace ShopsDbEntities.Entities.ProductEntities
 		public long Id { get; set; }
 
 		[JsonProperty]
-		public long ClientId { get; set; }
-
-		[JsonProperty]
-		public long AddressId { get; set; }
+		public long UserAddressId { get; set; }
 
 		[JsonProperty]
 		public string BucketProducts { get; set; }

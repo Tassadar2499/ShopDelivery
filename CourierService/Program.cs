@@ -18,6 +18,8 @@ namespace CourierService
 		public const string SETTING = "appsettings.json";
 		public static async Task Main(string[] args)
 		{
+			CreateHostBuilder(args).Build().Run();
+
 			var connectionString = GetServiceBusConnectionString();
 
 			await using var client = new ServiceBusClient(connectionString);
@@ -28,8 +30,6 @@ namespace CourierService
 			processor.ProcessErrorAsync += OrdersExecutor.ErrorHandlerAsync;
 
 			await processor.StartProcessingAsync();
-
-			CreateHostBuilder(args).Build().Run();
 		}
 
 		// Additional configuration is required to successfully run gRPC on macOS.
