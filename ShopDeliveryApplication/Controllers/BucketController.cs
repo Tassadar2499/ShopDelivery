@@ -39,12 +39,13 @@ namespace ShopDeliveryApplication.Controllers
 		[HttpPost]
 		public async Task SendOrderAsync()
 		{
-			UserManger.GetUserId(User);
+			//TODO: SendUserInfo
+			//UserManger.GetUserId(User);
 			var isSuccess = Session.TryGetString(BUCKET, out var productsIdArrStr);
 			if (isSuccess)
 			{
-				var userId = UserManger.GetUserId(User);
-				await BucketLogic.SendOrderAsync(productsIdArrStr, userId);
+				//var userId = UserManger.GetUserId(User);
+				await BucketLogic.SendOrderAsync(productsIdArrStr, "-1");
 			}
 		}
 	}
