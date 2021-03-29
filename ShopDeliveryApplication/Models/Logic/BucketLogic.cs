@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities.Entities.UsersInfo;
 using ShopsDbEntities.Logic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,8 +24,16 @@ namespace ShopDeliveryApplication.Models.Logic
 			_messageHandler = messageHandler;
 		}
 
-		public async Task SendOrderAsync(string idArrStr)
+		public async Task SendOrderAsync(string idArrStr, string userId)
 		{
+			//TODO: Заполение информации о заказе
+
+			/*var usersAddress = new UsersAddress()
+			{
+				UserId = userId,
+				AddressId = -1
+			};*/
+
 			var order = new Order()
 			{
 				BucketProducts = idArrStr
