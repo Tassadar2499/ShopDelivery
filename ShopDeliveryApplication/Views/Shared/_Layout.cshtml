@@ -22,7 +22,7 @@
 				</a>
 				@if(User.Identity.IsAuthenticated)
 				{
-					<p>@User.Identity.Name</p> 
+					<p>@User.Identity.Name</p>
 					<form method="post" asp-controller="Account" asp-action="Logout">
 						<input class="btn" type="submit" value="Выход" />
 					</form>

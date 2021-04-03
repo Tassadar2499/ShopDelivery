@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities.Entities.ProductEntities;
-using ShopsDbEntities.Entities.UsersInfo;
 using ShopsDbEntities.Logic;
 using System.Linq;
 using System.Threading.Tasks;

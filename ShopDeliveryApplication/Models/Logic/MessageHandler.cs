@@ -1,5 +1,4 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ShopsDbEntities.Entities.ProductEntities;
