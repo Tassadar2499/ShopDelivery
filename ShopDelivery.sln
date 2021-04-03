@@ -13,11 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbEntities", "Products
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderQueueHandler", "OrderQueueHandler\OrderQueueHandler.csproj", "{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierService", "CourierService\CourierService.csproj", "{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersService", "OrdersService\OrdersService.csproj", "{EDABB581-ECBC-46B6-A3A3-C22BD178E251}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersService", "OrdersService\OrdersService.csproj", "{EDABB581-ECBC-46B6-A3A3-C22BD178E251}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +43,6 @@ Global
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB9D70F6-9512-47DC-BBBD-EA4AE1142837}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU

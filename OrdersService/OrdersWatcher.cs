@@ -10,28 +10,27 @@ using System.Threading.Tasks;
 
 namespace OrdersService
 {
-	public class OrdersWatcher : IHostedService, IDisposable
+	public class OrdersWatcher : IHostedService
 	{
 		private const string QUEUE_NAME = "created_orders";
-		private readonly string _connectionString = "";
-		private ILogger<OrdersWatcher> Logger { get; }
-		private OrdersExecutor OrdersExecutor { get; }
+		private readonly ILogger<OrdersWatcher> _logger;
+		private readonly IConfiguration _configuration;
 
-		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration, OrdersExecutor ordersExecutor)
+		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration)
 		{
-			Logger = logger;
-			OrdersExecutor = ordersExecutor;
-			_connectionString = configuration.GetConnectionString("OrdersServiceBus");
-		}
-
-		public void Dispose()
-		{
-			throw new NotImplementedException();
+			_logger = logger;
+			_configuration = configuration;		
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
 		{
-			await using var client = new ServiceBusClient(_connectionString);
+			//TODO: Совместить консоль и логгер
+
+			_logger.LogDebug("Service started");
+			Console.WriteLine("Service started");
+
+			var connectionString = _configuration.GetConnectionString("OrdersServiceBus");
+			var client = new ServiceBusClient(connectionString);
 			var serviceBusOption = new ServiceBusProcessorOptions();
 			var processor = client.CreateProcessor(QUEUE_NAME, serviceBusOption);
 
@@ -43,7 +42,10 @@ namespace OrdersService
 
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			_logger.LogDebug("Service stopped");
+			Console.WriteLine("Service stopped");
+
+			return Task.CompletedTask;
 		}
 	}
 }

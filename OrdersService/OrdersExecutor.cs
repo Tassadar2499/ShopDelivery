@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OrdersService
 {
-	public class OrdersExecutor
+	public static class OrdersExecutor
 	{
-		public async Task ErrorHandlerAsync(ProcessErrorEventArgs arg)
+		public static async Task ErrorHandlerAsync(ProcessErrorEventArgs arg)
 		{
-			Console.WriteLine("Pepepopo");
+			Console.WriteLine("Error in Asure service bus");
 		}
 
-		public async Task MessageHandlerAsync(ProcessMessageEventArgs arg)
+		public static async Task MessageHandlerAsync(ProcessMessageEventArgs arg)
 		{
 			var message = arg.Message;
 			var body = message.Body.ToString();
