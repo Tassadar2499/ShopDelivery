@@ -13,11 +13,13 @@ namespace OrdersService
 		private const string QUEUE_NAME = "created_orders";
 		private readonly ILogger<OrdersWatcher> _logger;
 		private readonly IConfiguration _configuration;
+		private readonly OrdersExecutor _ordersExecutor;
 
-		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration)
+		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration, OrdersExecutor ordersExecutor)
 		{
 			_logger = logger;
 			_configuration = configuration;
+			_ordersExecutor = ordersExecutor;
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
@@ -32,8 +34,8 @@ namespace OrdersService
 			var serviceBusOption = new ServiceBusProcessorOptions();
 			var processor = client.CreateProcessor(QUEUE_NAME, serviceBusOption);
 
-			processor.ProcessMessageAsync += OrdersExecutor.MessageHandlerAsync;
-			processor.ProcessErrorAsync += OrdersExecutor.ErrorHandlerAsync;
+			processor.ProcessMessageAsync += _ordersExecutor.MessageHandlerAsync;
+			processor.ProcessErrorAsync += _ordersExecutor.ErrorHandlerAsync;
 
 			await processor.StartProcessingAsync();
 		}
