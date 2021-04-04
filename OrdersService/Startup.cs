@@ -22,7 +22,6 @@ namespace OrdersService
 		{
 			services.AddHostedService<OrdersWatcher>();
 			services.AddSingleton<OrdersExecutor>();
-			services.AddSingleton<CourierServiceSender>();
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connection));

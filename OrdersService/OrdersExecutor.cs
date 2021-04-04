@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
@@ -13,12 +14,12 @@ namespace OrdersService
 {
 	public class OrdersExecutor
 	{
-		private readonly MainDbContext _mainContext;
 		private readonly CourierServiceSender _sender;
-		public OrdersExecutor(MainDbContext mainContext, CourierServiceSender sender)
+		private readonly IServiceProvider _scopeFactory;
+		public OrdersExecutor(IServiceProvider scopeFactory, IConfiguration configuration)
 		{
-			_mainContext = mainContext;
-			_sender = sender;
+			_scopeFactory = scopeFactory;
+			_sender = new CourierServiceSender(configuration);
 		}
 
 		public async Task ErrorHandlerAsync(ProcessErrorEventArgs arg)
@@ -38,12 +39,17 @@ namespace OrdersService
 
 		private async Task HandleOrderAsync(string message)
 		{
+			//{ "Id": 1, "BucketProducts": "[2, 4, 4, 2, 5]", "UserAddressId": 1 }
+
+			using var scope = _scopeFactory.CreateScope();
+			var context = scope.ServiceProvider.GetRequiredService<MainDbContext>();
+
 			var order = JsonConvert.DeserializeObject<Order>(message);
 
-			var usersAddress = await _mainContext.UsersAddresses.FindAsync(order.UserAddressId);
-			var address = await _mainContext.Addresses.FindAsync(usersAddress.AddressId);
+			var usersAddress = await context.UsersAddresses.FindAsync(order.UserAddressId);
+			var address = await context.Addresses.FindAsync(usersAddress.AddressId);
 
-			await _sender.FindActiveCourier(address.Coords);
+			await _sender.FindActiveCourier(address.Longitude, address.Latitude);
 		}
 	}
 }

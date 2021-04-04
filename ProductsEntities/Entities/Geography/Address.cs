@@ -18,6 +18,9 @@ namespace ShopsDbEntities.Entities
 		public string House { get; set; }
 
 		[JsonProperty]
-		public string Coords { get; set; }
+		public double Latitude { get; set; }
+
+		[JsonProperty]
+		public double Longitude { get; set; }
 	}
 }
