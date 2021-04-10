@@ -27,7 +27,7 @@ namespace CourierService
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapGrpcService<GreeterService>();
+				endpoints.MapGrpcService<MainCouriersService>();
 
 				endpoints.MapGet("/", async context =>
 				{

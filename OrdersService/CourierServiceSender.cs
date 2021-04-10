@@ -20,13 +20,15 @@ namespace OrdersService
 		public async Task FindActiveCourier(double longitude, double latitude)
 		{
 			using var channel = GrpcChannel.ForAddress(_courierServiceAddress);
-			var client = new Greeter.GreeterClient(channel);
-			var request = new HelloRequest
+			var client = new MainCouriers.MainCouriersClient(channel);
+
+			var request = new ActiveCourierRequest
 			{
-				Name = $"{longitude};{latitude}"
+				Longitude = longitude,
+				Latitude = latitude
 			};
 
-			var reply = await client.SayHelloAsync(request);
+			var reply = await client.FindActiveCourierAsync(request);
 			Console.WriteLine("Ответ сервера: " + reply.Message);
 		}
 	}
