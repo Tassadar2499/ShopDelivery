@@ -4,18 +4,18 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace CourierService
 {
 	public class MainCouriersService : MainCouriers.MainCouriersBase
 	{
 		private readonly ILogger<MainCouriersService> _logger;
-		private readonly ConnectionMultiplexer _redisConnection;
-		public MainCouriersService(ILogger<MainCouriersService> logger, IConfiguration configuration)
+		private readonly IRedisCacheClient _redisCacheClient;
+		public MainCouriersService(ILogger<MainCouriersService> logger, IRedisCacheClient redisCacheClient)
 		{
+			_redisCacheClient = redisCacheClient;
 			_logger = logger;
-			var cacheConnection = configuration["CacheConnection"];
-			_redisConnection = ConnectionMultiplexer.Connect(cacheConnection);
 		}
 
 		public override Task<ActiveCourierReply> FindActiveCourier(ActiveCourierRequest request, ServerCallContext context)
@@ -23,13 +23,19 @@ namespace CourierService
 			var coords = (request.Longitude, request.Latitude);
 			_logger.LogDebug($"Recieved {coords}");
 
-			var database = _redisConnection.GetDatabase();
-			database.StringSet("test", "pepe");
+			var task = _redisCacheClient.Db0.AddAsync("test", "pepe");
+			task.Wait();
 
-			Console.WriteLine(database.StringGet("test"));
+			var res = GetValueAsync().Result;
 
+			Console.WriteLine(res);
 
 			throw new NotImplementedException();
+		}
+
+		private async Task<string> GetValueAsync()
+		{
+			return await _redisCacheClient.Db0.GetAsync<string>("test");
 		}
 	}
 }

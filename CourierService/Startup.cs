@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis.Extensions.Core.Configuration;
+using StackExchange.Redis.Extensions.Newtonsoft;
 
 namespace CourierService
 {
@@ -21,6 +23,8 @@ namespace CourierService
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddGrpc();
+			var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
+			services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
