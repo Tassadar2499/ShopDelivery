@@ -1,0 +1,36 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "CourierService";
+
+package auth;
+
+service CouriersAuth {
+	rpc Register (RegisterCourierRequest) returns (Empty);
+	rpc Login (LoginCourierRequest) returns (LoginCourierReply);
+	rpc Update (UpdateCourierRequest) returns (Empty);
+}
+
+message RegisterCourierRequest {
+	string login = 1;
+	string passwordHash = 2;
+	double longitude = 3;
+	double latitude = 4;
+}
+
+message LoginCourierRequest {
+	string login = 1;
+}
+
+message LoginCourierReply {
+	bool isContains = 1;
+	string passwordHash = 2;
+}
+
+message UpdateCourierRequest {
+	string login = 1;
+	double longitude = 2;
+	double latitude = 3;
+}
+
+message Empty {
+}

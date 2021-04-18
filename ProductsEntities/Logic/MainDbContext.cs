@@ -20,6 +20,7 @@ namespace ShopsDbEntities
 		public DbSet<UsersAddress> UsersAddresses { get; set; }
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<City> Cities { get; set; }
+		public DbSet<Courier> Couriers { get; set; }
 
 		public MainDbContext(DbContextOptions<MainDbContext> options)
 			: base(options)

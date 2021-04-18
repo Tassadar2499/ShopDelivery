@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\couriers.proto" GrpcServices="Server" />
+	<Protobuf Include="Protos\auth.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,10 @@
     <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="6.4.5" />
     <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="6.4.5" />
     <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="6.4.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProductsEntities\ShopsDbEntities.csproj" />
   </ItemGroup>
 
 </Project>
