@@ -1,11 +1,8 @@
-﻿using Azure.Core;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using StackExchange.Redis.Extensions.Core.Abstractions;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,13 +10,14 @@ namespace CourierService
 {
 	public class AuthCouriersService : CouriersAuth.CouriersAuthBase
 	{
-		private const string COURIERS_KEY = "couriers_id";
+		public const string COURIERS_KEY = "couriers_id";
 
 		private readonly ILogger<MainCouriersService> _logger;
 		private readonly IRedisCacheClient _redisCacheClient;
 		private readonly MainDbContext _context;
 		private IQueryable<Courier> Couriers => _context.Couriers;
 		private IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
+
 		public AuthCouriersService(ILogger<MainCouriersService> logger, IRedisCacheClient redisCacheClient, MainDbContext context)
 		{
 			_redisCacheClient = redisCacheClient;
@@ -77,7 +75,7 @@ namespace CourierService
 			courier.Longitude = request.Longitude;
 			courier.Latitude = request.Latitude;
 
-			var courierKey = courier.Id.ToString();
+			var courierKey = $"Courier{courier.Id}";
 			var isCourierInCache = RedisDatabase.ExistsAsync(courierKey).Result;
 			if (!isCourierInCache)
 			{

@@ -2,17 +2,13 @@
 using Grpc.Net.Client;
 using Isopoh.Cryptography.Argon2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourierClient
 {
 	public class CouriersHandler
 	{
 		private readonly string _serviceHost;
+
 		public CouriersHandler(string serviceHost) => _serviceHost = serviceHost;
 
 		public void Register()

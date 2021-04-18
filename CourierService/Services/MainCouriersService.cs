@@ -1,7 +1,9 @@
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using ShopsDbEntities.Entities;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CourierService
@@ -10,6 +12,7 @@ namespace CourierService
 	{
 		private readonly ILogger<MainCouriersService> _logger;
 		private readonly IRedisCacheClient _redisCacheClient;
+		private IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
 
 		public MainCouriersService(ILogger<MainCouriersService> logger, IRedisCacheClient redisCacheClient)
 		{
@@ -17,24 +20,40 @@ namespace CourierService
 			_logger = logger;
 		}
 
-		public override Task<ActiveCourierReply> FindActiveCourier(ActiveCourierRequest request, ServerCallContext context)
+		public override async Task<ActiveCourierReply> FindActiveCourier(ActiveCourierRequest request, ServerCallContext context)
 		{
+			var reply = new ActiveCourierReply();
+
 			var coords = (request.Longitude, request.Latitude);
 			_logger.LogDebug($"Recieved {coords}");
 
-			var task = _redisCacheClient.Db0.AddAsync("test", "pepe");
-			task.Wait();
+			var couriersIdStr = await RedisDatabase.GetAsync<string>(AuthCouriersService.COURIERS_KEY);
+			if (string.IsNullOrEmpty(couriersIdStr))
+				return reply;
 
-			var res = GetValueAsync().Result;
+			couriersIdStr = couriersIdStr[..^1];
+			var couriersKeys = couriersIdStr
+				.Split(';')
+				.Select(long.Parse)
+				.Select(i => $"Courier{i}")
+				.ToHashSet();
 
-			Console.WriteLine(res);
+			var couriersDict = await RedisDatabase.GetAllAsync<Courier>(couriersKeys);
+			var activeCouriers = couriersDict
+				.Select(kv => kv.Value)
+				.Where(c => c.Status == CourierStatus.Active)
+				.Select(c => (Courier: c, Value: GetDeltaCoords(coords, (c.Longitude, c.Latitude))))
+				.ToArray();
 
-			throw new NotImplementedException();
+			var minValue = activeCouriers.Min(c => c.Value);
+			var correctCourier = activeCouriers.FirstOrDefault(c => c.Value == minValue).Courier;
+
+			reply.Login = correctCourier.Login;
+
+			return reply;
 		}
 
-		private async Task<string> GetValueAsync()
-		{
-			return await _redisCacheClient.Db0.GetAsync<string>("test");
-		}
+		private static double GetDeltaCoords((double Longitude, double Latitude) first, (double Longitude, double Latitude) second)
+			=> Math.Abs(first.Latitude - second.Latitude) + Math.Abs(first.Longitude - second.Longitude);
 	}
 }

@@ -4,9 +4,9 @@ using System.IO;
 
 namespace CourierClient
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			Console.WriteLine("Enter command:");
 			var command = Console.ReadLine();

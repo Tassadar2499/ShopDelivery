@@ -14,5 +14,5 @@ message ActiveCourierRequest {
 }
 
 message ActiveCourierReply {
-  string message = 1;
+  string login = 1;
 }
