@@ -1,10 +1,8 @@
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using StackExchange.Redis;
-using StackExchange.Redis.Extensions.Core.Abstractions;
 
 namespace CourierService
 {
@@ -12,6 +10,7 @@ namespace CourierService
 	{
 		private readonly ILogger<MainCouriersService> _logger;
 		private readonly IRedisCacheClient _redisCacheClient;
+
 		public MainCouriersService(ILogger<MainCouriersService> logger, IRedisCacheClient redisCacheClient)
 		{
 			_redisCacheClient = redisCacheClient;
