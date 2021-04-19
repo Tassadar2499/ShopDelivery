@@ -8,7 +8,6 @@ namespace CourierClient
 	public class CouriersHandler
 	{
 		private readonly string _serviceHost;
-
 		public CouriersHandler(string serviceHost) => _serviceHost = serviceHost;
 
 		public void Register()
@@ -49,6 +48,12 @@ namespace CourierClient
 			};
 
 			var reply = client.Login(loginRequest);
+			if (!reply.IsContains)
+			{
+				Console.WriteLine($"Cannot find user by login - {login}");
+				return;
+			}
+
 			var passwordHash = reply.PasswordHash;
 
 			var isCorrect = Argon2.Verify(passwordHash, password.ToString());

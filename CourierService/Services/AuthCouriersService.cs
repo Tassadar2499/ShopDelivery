@@ -46,6 +46,7 @@ namespace CourierService
 				return reply;
 
 			reply.PasswordHash = courier.Password;
+			reply.IsContains = true;
 
 			return reply;
 		}
