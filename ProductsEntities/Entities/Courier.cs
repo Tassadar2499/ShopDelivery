@@ -7,7 +7,8 @@ namespace ShopsDbEntities.Entities
 	public enum CourierStatus : byte
 	{ 
 		Active = 1,
-		Sleep = 2
+		Sleep = 2,
+		Work = 3
 	}
 
 	public class Courier

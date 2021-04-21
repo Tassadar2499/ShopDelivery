@@ -32,7 +32,9 @@ namespace CourierService
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
 
 			services.AddHostedService<OrdersWatcher>();
-			services.AddSingleton<OrdersExecutor>();
+			services.AddSingleton<OrdersHandler>();
+			services.AddSingleton<CouriersManager>();
+			services.AddSingleton<CouriersCacheLogic>();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

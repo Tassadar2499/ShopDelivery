@@ -1,8 +1,7 @@
-﻿using Grpc.Core;
-using Microsoft.Extensions.Logging;
+﻿using CourierService.Services;
+using Grpc.Core;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
-using StackExchange.Redis.Extensions.Core.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,14 +11,14 @@ namespace CourierService
 	{
 		public const string COURIERS_KEY = "couriers_id";
 
-		private readonly IRedisCacheClient _redisCacheClient;
+		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
-		private IQueryable<Courier> Couriers => _context.Couriers;
-		private IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
 
-		public AuthCouriersService(IRedisCacheClient redisCacheClient, MainDbContext context)
+		private IQueryable<Courier> Couriers => _context.Couriers;
+
+		public AuthCouriersService(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
 		{
-			_redisCacheClient = redisCacheClient;
+			_couriersCacheLogic = couriersCacheLogic;
 			_context = context;
 		}
 
@@ -29,8 +28,18 @@ namespace CourierService
 		public override Task<Empty> Register(RegisterCourierRequest request, ServerCallContext context)
 			=> new(() => RegisterCourier(request, context));
 
-		public override Task<Empty> Update(UpdateCourierRequest request, ServerCallContext context)
-			=> new(() => UpdateCourier(request, context));
+		public override async Task<Empty> Update(UpdateCourierRequest request, ServerCallContext context)
+		{
+			var courier = Couriers.FirstOrDefault(c => c.Login == request.Login);
+			courier.Status = CourierStatus.Active;
+			courier.Host = context.Host;
+			courier.Longitude = request.Longitude;
+			courier.Latitude = request.Latitude;
+
+			await _couriersCacheLogic.UpdateAsync(courier);
+
+			return new Empty();
+		}
 
 		private LoginCourierReply LoginCourier(LoginCourierRequest request)
 		{
@@ -62,27 +71,6 @@ namespace CourierService
 			};
 
 			_context.CreateAndSave(courier);
-
-			return new Empty();
-		}
-
-		private Empty UpdateCourier(UpdateCourierRequest request, ServerCallContext context)
-		{
-			var courier = Couriers.FirstOrDefault(c => c.Login == request.Login);
-			courier.Status = CourierStatus.Active;
-			courier.Host = context.Host;
-			courier.Longitude = request.Longitude;
-			courier.Latitude = request.Latitude;
-
-			var courierKey = $"Courier{courier.Id}";
-			var isCourierInCache = RedisDatabase.ExistsAsync(courierKey).Result;
-			if (!isCourierInCache)
-			{
-				var couriersId = RedisDatabase.GetAsync<string>(COURIERS_KEY).Result ?? "";
-				RedisDatabase.SetAddAsync(COURIERS_KEY, $"{couriersId}{courierKey};").Wait();
-			}
-
-			RedisDatabase.SetAddAsync(courierKey, courier).Wait();
 
 			return new Empty();
 		}

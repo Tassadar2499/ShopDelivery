@@ -3,8 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +13,9 @@ namespace CourierService.Services
 		private const string QUEUE_NAME = "created_orders";
 		private readonly ILogger<OrdersWatcher> _logger;
 		private readonly IConfiguration _configuration;
-		private readonly OrdersExecutor _ordersExecutor;
+		private readonly OrdersHandler _ordersExecutor;
 
-		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration, OrdersExecutor ordersExecutor)
+		public OrdersWatcher(ILogger<OrdersWatcher> logger, IConfiguration configuration, OrdersHandler ordersExecutor)
 		{
 			_logger = logger;
 			_configuration = configuration;
