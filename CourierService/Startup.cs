@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CourierService.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,9 @@ namespace CourierService
 
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
+
+			services.AddHostedService<OrdersWatcher>();
+			services.AddSingleton<OrdersExecutor>();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,7 +46,7 @@ namespace CourierService
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapGrpcService<MainCouriersService>();
+				endpoints.MapGrpcService<AuthCouriersService>();
 
 				endpoints.MapGet("/", async context =>
 				{

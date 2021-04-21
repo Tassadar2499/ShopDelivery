@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OrdersService
+namespace CourierService.Services
 {
 	public class OrdersWatcher : IHostedService
 	{
@@ -37,7 +39,7 @@ namespace OrdersService
 			processor.ProcessMessageAsync += _ordersExecutor.MessageHandlerAsync;
 			processor.ProcessErrorAsync += _ordersExecutor.ErrorHandlerAsync;
 
-			await processor.StartProcessingAsync();
+			await processor.StartProcessingAsync(cancellationToken);
 		}
 
 		public Task StopAsync(CancellationToken cancellationToken)

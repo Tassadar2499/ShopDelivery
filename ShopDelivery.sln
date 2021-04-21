@@ -15,11 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierService", "CourierService\CourierService.csproj", "{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersService", "OrdersService\OrdersService.csproj", "{EDABB581-ECBC-46B6-A3A3-C22BD178E251}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierService_Tests", "CourierService_Tests\CourierService_Tests.csproj", "{BBD6703B-5805-482C-840E-A28C737AB3B8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourierClient", "CourierClient\CourierClient.csproj", "{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierClient", "CourierClient\CourierClient.csproj", "{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,14 +47,6 @@ Global
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDABB581-ECBC-46B6-A3A3-C22BD178E251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDABB581-ECBC-46B6-A3A3-C22BD178E251}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDABB581-ECBC-46B6-A3A3-C22BD178E251}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDABB581-ECBC-46B6-A3A3-C22BD178E251}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBD6703B-5805-482C-840E-A28C737AB3B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBD6703B-5805-482C-840E-A28C737AB3B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBD6703B-5805-482C-840E-A28C737AB3B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBD6703B-5805-482C-840E-A28C737AB3B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU

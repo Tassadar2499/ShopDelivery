@@ -12,16 +12,14 @@ namespace CourierService
 	{
 		public const string COURIERS_KEY = "couriers_id";
 
-		private readonly ILogger<MainCouriersService> _logger;
 		private readonly IRedisCacheClient _redisCacheClient;
 		private readonly MainDbContext _context;
 		private IQueryable<Courier> Couriers => _context.Couriers;
 		private IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
 
-		public AuthCouriersService(ILogger<MainCouriersService> logger, IRedisCacheClient redisCacheClient, MainDbContext context)
+		public AuthCouriersService(IRedisCacheClient redisCacheClient, MainDbContext context)
 		{
 			_redisCacheClient = redisCacheClient;
-			_logger = logger;
 			_context = context;
 		}
 
