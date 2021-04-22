@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CourierService.Services
+namespace CouriersWebService.Services
 {
 	public class CouriersCacheLogic
 	{
@@ -13,6 +13,7 @@ namespace CourierService.Services
 
 		private readonly IRedisCacheClient _redisCacheClient;
 		public IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
+
 		public CouriersCacheLogic(IRedisCacheClient redisCacheClient) => _redisCacheClient = redisCacheClient;
 
 		public async Task UpdateAsync(Courier courier)
@@ -37,7 +38,7 @@ namespace CourierService.Services
 
 		public async Task<HashSet<string>> GetCouriersKeysAsync()
 		{
-			var couriersIdStr = await RedisDatabase.GetAsync<string>(AuthCouriersService.COURIERS_KEY);
+			var couriersIdStr = await RedisDatabase.GetAsync<string>(COURIERS_KEY);
 
 			return couriersIdStr?
 				.Split(';')

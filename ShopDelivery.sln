@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierService", "CourierSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierClient", "CourierClient\CourierClient.csproj", "{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouriersWebService", "CouriersWebService\CouriersWebService.csproj", "{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
