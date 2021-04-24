@@ -8,6 +8,7 @@ namespace CourierClient
 	public class CouriersHandler
 	{
 		private readonly string _serviceHost;
+
 		public CouriersHandler(string serviceHost) => _serviceHost = serviceHost;
 
 		public void Register()

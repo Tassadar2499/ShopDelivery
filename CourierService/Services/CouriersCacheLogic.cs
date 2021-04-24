@@ -13,6 +13,7 @@ namespace CourierService.Services
 
 		private readonly IRedisCacheClient _redisCacheClient;
 		public IRedisDatabase RedisDatabase => _redisCacheClient.Db0;
+
 		public CouriersCacheLogic(IRedisCacheClient redisCacheClient) => _redisCacheClient = redisCacheClient;
 
 		public async Task UpdateAsync(Courier courier)

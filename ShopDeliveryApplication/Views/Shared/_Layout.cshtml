@@ -20,7 +20,7 @@
 				<a id="bucket-btn" class="nav-link text-dark" onclick="Bucket.goToBucketPage()">
 					Корзина
 				</a>
-				@if(User.Identity.IsAuthenticated)
+				@if (User.Identity.IsAuthenticated)
 				{
 					<p>@User.Identity.Name</p>
 					<form method="post" asp-controller="Account" asp-action="Logout">

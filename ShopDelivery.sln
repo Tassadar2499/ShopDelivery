@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierClient", "CourierCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouriersWebService", "CouriersWebService\CouriersWebService.csproj", "{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersHandler", "OrdersHandler\OrdersHandler.csproj", "{6465F6A1-D553-4B3D-8D0D-DAE2C347CFA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersHandler", "OrdersHandler\OrdersHandler.csproj", "{6465F6A1-D553-4B3D-8D0D-DAE2C347CFA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

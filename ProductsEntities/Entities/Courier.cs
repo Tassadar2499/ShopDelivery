@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ShopsDbEntities.Entities
+﻿namespace ShopsDbEntities.Entities
 {
 	public enum CourierStatus : byte
-	{ 
+	{
 		Active = 1,
 		Sleep = 2,
 		Work = 3
