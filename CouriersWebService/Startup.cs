@@ -1,4 +1,3 @@
-using CouriersWebService.Data;
 using CouriersWebService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,8 +23,6 @@ namespace CouriersWebService
 			services.AddRazorPages();
 			services.AddServerSideBlazor();
 			services.AddControllers();
-
-			services.AddSingleton<WeatherForecastService>();
 
 			var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
 			services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);

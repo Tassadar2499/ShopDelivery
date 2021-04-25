@@ -13,10 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbEntities", "Products
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierService", "CourierService\CourierService.csproj", "{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourierClient", "CourierClient\CourierClient.csproj", "{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouriersWebService", "CouriersWebService\CouriersWebService.csproj", "{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersHandler", "OrdersHandler\OrdersHandler.csproj", "{6465F6A1-D553-4B3D-8D0D-DAE2C347CFA8}"
@@ -47,14 +43,6 @@ Global
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD33634A-D4FC-458C-A68A-7753E508705D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B618A8B-3441-4AC0-ADD1-E0D8D5B8FFC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBB7A5D3-206B-4CEF-B99A-8D38D171E2E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABC0A0E1-1494-42C8-973A-2B7A85E92E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
