@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsParser", "ShopsParser\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi", "ProductsWebApi\ProductsWebApi.csproj", "{7FCC61BD-ADE7-4184-B5D8-CF1394077E78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi_Test", "ProductsWebApi_Test\ProductsWebApi_Test.csproj", "{73311F7E-1767-4B3B-B03E-9F38A0782494}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbEntities", "ProductsEntities\ShopsDbEntities.csproj", "{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
@@ -31,10 +29,6 @@ Global
 		{7FCC61BD-ADE7-4184-B5D8-CF1394077E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FCC61BD-ADE7-4184-B5D8-CF1394077E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FCC61BD-ADE7-4184-B5D8-CF1394077E78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73311F7E-1767-4B3B-B03E-9F38A0782494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73311F7E-1767-4B3B-B03E-9F38A0782494}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73311F7E-1767-4B3B-B03E-9F38A0782494}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73311F7E-1767-4B3B-B03E-9F38A0782494}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}.Release|Any CPU.ActiveCfg = Release|Any CPU
