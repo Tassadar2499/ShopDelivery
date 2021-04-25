@@ -11,6 +11,7 @@ using ShopsDbEntities;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Newtonsoft;
 using System.Linq;
+using System.Net.Http;
 
 namespace CouriersWebService
 {
@@ -33,7 +34,8 @@ namespace CouriersWebService
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
 
-			services.AddSingleton<CouriersManager>();
+			services.AddScoped<HttpClient>();
+			services.AddSingleton<OrdersLogic>();
 			services.AddSingleton<CouriersCacheLogic>();
 
 			services.AddResponseCompression

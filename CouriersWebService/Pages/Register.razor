@@ -1,4 +1,10 @@
 ﻿@page "/register"
+@using CouriersWebService.Data
+@using System.Net.Http.Json;
+
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
 <h3>Register</h3>
 
 <EditForm Model="@RegisterData" OnValidSubmit="@HandleValidSubmit">
@@ -10,3 +16,10 @@
 
 	<button type="submit">Register</button>
 </EditForm>
+
+@code {
+	private RegisterData RegisterData { get; set; } = new RegisterData();
+
+	private void HandleValidSubmit()
+		=> httpClient.PostAsJsonAsync($"{navigationManager.BaseUri}Auth/Register", RegisterData);
+}

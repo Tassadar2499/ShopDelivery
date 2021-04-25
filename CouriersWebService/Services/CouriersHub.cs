@@ -8,5 +8,9 @@ namespace CouriersWebService.Services
 {
 	public class CouriersHub : Hub
 	{
+		public async Task SendOrderInfoAsync(string login)
+		{
+			await Clients.All.SendAsync("Send", login);
+		}
 	}
 }

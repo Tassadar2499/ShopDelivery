@@ -10,9 +10,9 @@ namespace CouriersWebService.Controllers
 	[Route("[controller]")]
 	public class OrdersController : ControllerBase
 	{
-		private readonly CouriersManager _manager;
+		private readonly OrdersLogic _manager;
 
-		public OrdersController(CouriersManager manager) => _manager = manager;
+		public OrdersController(OrdersLogic manager) => _manager = manager;
 
 		[HttpPost("Handle")]
 		public async Task HandleOrderAsync([FromBody] Order order)

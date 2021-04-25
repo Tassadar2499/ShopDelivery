@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class CouriersManager
+	public class OrdersLogic
 	{
 		private readonly IServiceProvider _scopeFactory;
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private IRedisDatabase RedisDatabase => _couriersCacheLogic.RedisDatabase;
 
-		public CouriersManager(IServiceProvider scopeFactory, CouriersCacheLogic couriersCacheLogic)
+		public OrdersLogic(IServiceProvider scopeFactory, CouriersCacheLogic couriersCacheLogic)
 		{
 			_scopeFactory = scopeFactory;
 			_couriersCacheLogic = couriersCacheLogic;

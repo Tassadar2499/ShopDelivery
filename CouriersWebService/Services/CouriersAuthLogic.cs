@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class CouriersAuth
+	public class CouriersAuthLogic
 	{
 		public const string COURIERS_KEY = "couriers_id";
 
@@ -17,7 +17,7 @@ namespace CouriersWebService.Services
 
 		private IQueryable<Courier> Couriers => _context.Couriers;
 
-		public CouriersAuth(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
+		public CouriersAuthLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
 		{
 			_couriersCacheLogic = couriersCacheLogic;
 			_context = context;

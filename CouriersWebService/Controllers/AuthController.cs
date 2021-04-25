@@ -1,4 +1,6 @@
 ﻿using CouriersWebService.Data;
+using CouriersWebService.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,15 +9,18 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Controllers
 {
-	public class AuthController : Controller
+	[ApiController]
+	[Route("[controller]")]
+	public class AuthController : ControllerBase
 	{
-		[HttpGet]
-		public IActionResult Register() => View();
+		private readonly CouriersAuthLogic _authLogic;
+		private IRequestCookieCollection Cookies => HttpContext.Request.Cookies;
+		public AuthController(CouriersAuthLogic authLogic) => _authLogic = authLogic;
 
-		[HttpPost]
-		public async Task<IActionResult> Register(RegisterData registerData)
+		[HttpPost("Register")]
+		public async Task RegisterAsync(RegisterData registerData)
 		{
-			throw new NotImplementedException();
+			await _authLogic.RegisterAsync(registerData);
 		}
 	}
 }
