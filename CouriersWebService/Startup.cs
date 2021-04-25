@@ -1,6 +1,7 @@
 using CouriersWebService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using ShopsDbEntities;
 using StackExchange.Redis.Extensions.Core.Configuration;
 using StackExchange.Redis.Extensions.Newtonsoft;
+using System.Linq;
 
 namespace CouriersWebService
 {
@@ -23,6 +25,7 @@ namespace CouriersWebService
 			services.AddRazorPages();
 			services.AddServerSideBlazor();
 			services.AddControllers();
+			services.AddSignalR();
 
 			var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
 			services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);
@@ -32,6 +35,11 @@ namespace CouriersWebService
 
 			services.AddSingleton<CouriersManager>();
 			services.AddSingleton<CouriersCacheLogic>();
+
+			services.AddResponseCompression
+			(
+				opts =>	opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
+			);
 
 			services.AddSwaggerGen((config) =>
 			{
@@ -57,6 +65,7 @@ namespace CouriersWebService
 				app.UseExceptionHandler("/Error");
 			}
 
+			app.UseResponseCompression();
 			app.UseStaticFiles();
 
 			app.UseRouting();
@@ -65,6 +74,7 @@ namespace CouriersWebService
 			{
 				endpoints.MapBlazorHub();
 				endpoints.MapControllers();
+				endpoints.MapHub<CouriersHub>("/couriershub");
 				endpoints.MapFallbackToPage("/_Host");
 			});
 		}
