@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
 	public class CouriersHub : Hub
 	{
-		public async Task SendOrderInfoAsync(string login)
+		private readonly CouriersCacheLogic _couriersCacheLogic;
+
+		public CouriersHub(CouriersCacheLogic couriersCacheLogic) => _couriersCacheLogic = couriersCacheLogic;
+
+		public async Task SendOrderInfoAsync(string login, string orderInfo)
 		{
-			await Clients.All.SendAsync("Send", login);
+			var courier = await _couriersCacheLogic.GetCourierByLogin(login);
+			var client = Clients.Client(courier.SignalRConnectionId);
+
+			await client.SendAsync("RecieveOrderInfo", orderInfo);
 		}
 	}
 }

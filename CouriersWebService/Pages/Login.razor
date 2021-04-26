@@ -1,13 +1,14 @@
-﻿@page "/register"
+﻿@page "/login"
 
-@using CouriersWebService.Services
 @using CouriersWebService.Data
+@using System.Net.Http.Json;
 
-@inject CouriersAuthLogic authLogic
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
 
 <h3>Register</h3>
 
-<EditForm Model="@AuthData" OnValidSubmit="@RegisterAsync">
+<EditForm Model="@AuthData" OnValidSubmit="@HandleLogin">
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 
@@ -25,6 +26,6 @@
 		AuthData = new AuthData();
 	}
 
-	private async Task RegisterAsync()
-		=> await authLogic.RegisterAsync(AuthData);
+	private async Task HandleLogin()
+		 => await httpClient.PostAsJsonAsync($"{navigationManager.BaseUri}Auth/Login", AuthData).ConfigureAwait(false);
 }

@@ -47,6 +47,14 @@ namespace CouriersWebService.Services
 				.ToHashSet();
 		}
 
+		public async Task<Courier> GetCourierByLogin(string login)
+		{
+			var keys = await GetCouriersKeysAsync();
+			var couriers = await GetCouriersByKeysAsync(keys);
+
+			return couriers.FirstOrDefault(c => c.Login == login);
+		}
+
 		public async Task<IEnumerable<Courier>> GetCouriersByKeysAsync(IEnumerable<string> keys)
 		{
 			var couriersDict = await RedisDatabase.GetAllAsync<Courier>(keys);

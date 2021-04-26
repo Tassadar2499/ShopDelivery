@@ -2,9 +2,6 @@
 using CouriersWebService.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Controllers
@@ -13,14 +10,25 @@ namespace CouriersWebService.Controllers
 	[Route("[controller]")]
 	public class AuthController : ControllerBase
 	{
+		private const string LOGIN_KEY = "LoginKey";
+
 		private readonly CouriersAuthLogic _authLogic;
-		private IRequestCookieCollection Cookies => HttpContext.Request.Cookies;
+		private IResponseCookies Cookies => HttpContext.Response.Cookies;
+
 		public AuthController(CouriersAuthLogic authLogic) => _authLogic = authLogic;
 
-		[HttpPost("Register")]
-		public async Task RegisterAsync(RegisterData registerData)
+		[HttpGet("Update")]
+		public async Task UpdateAsync([FromBody] UpdateCourierData courierData)
 		{
-			await _authLogic.RegisterAsync(registerData);
+			//await _authLogic.UpdateAsync(login);
+		}
+
+		[HttpPost("Login")]
+		public async Task LoginAsync([FromBody] AuthData authData)
+		{
+			var isSuccess = _authLogic.Login(authData);
+			if (isSuccess)
+				Cookies.Append(LOGIN_KEY, authData.Login);
 		}
 	}
 }

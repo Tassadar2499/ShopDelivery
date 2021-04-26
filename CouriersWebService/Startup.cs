@@ -40,7 +40,7 @@ namespace CouriersWebService
 
 			services.AddResponseCompression
 			(
-				opts =>	opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
+				opts => opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" })
 			);
 
 			services.AddSwaggerGen((config) =>

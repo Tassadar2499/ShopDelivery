@@ -43,8 +43,10 @@ namespace CouriersWebService.Services
 			correctCourier.Status = CourierStatus.Work;
 			await _couriersCacheLogic.UpdateAsync(correctCourier);
 
-			var login = correctCourier?.Login;
-			Console.WriteLine(login);
+			var orderInfo = "Order To handle";
+
+			var couriersHub = new CouriersHub(_couriersCacheLogic);
+			await couriersHub.SendOrderInfoAsync(correctCourier?.Login, orderInfo);
 		}
 
 		private async Task<Courier> GetCorrectCourierAsync((double Longitude, double Latitude) coords)
