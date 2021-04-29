@@ -3,9 +3,11 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using CouriersWebService.Data
 @using System.Net.Http.Json;
+@using CouriersWebService.Services;
 
 @inject NavigationManager NavigationManager
 @inject HttpClient HttpClient
+@inject CouriersAuthLogic authLogic
 
 @implements IAsyncDisposable
 
@@ -38,15 +40,17 @@
 
 		await HubConnection.StartAsync();
 
+		var cookieData = await HttpClient.GetFromJsonAsync<CookieData>($"{NavigationManager.BaseUri}Auth/GetCookie");
 		var random = new Random();
 		var updateCourierData = new UpdateCourierData()
 		{
+			Login = cookieData.Login,
 			SignalRConnectionId = HubConnection.ConnectionId,
 			Longitude = random.Next(1000) + random.NextDouble(),
 			Latitude = random.Next(1000) + random.NextDouble()
 		};
 
-		await HttpClient.PostAsJsonAsync($"{NavigationManager.BaseUri}Auth/Update", updateCourierData);
+		await authLogic.UpdateAsync(updateCourierData);
 	}
 
 	public bool IsConnected =>

@@ -12,14 +12,13 @@ namespace CouriersWebService.Services
 {
 	public class OrdersLogic
 	{
-		private readonly IServiceProvider _scopeFactory;
 		private readonly CouriersCacheLogic _couriersCacheLogic;
-		private IRedisDatabase RedisDatabase => _couriersCacheLogic.RedisDatabase;
+		private readonly MainDbContext _context;
 
-		public OrdersLogic(IServiceProvider scopeFactory, CouriersCacheLogic couriersCacheLogic)
+		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
 		{
-			_scopeFactory = scopeFactory;
 			_couriersCacheLogic = couriersCacheLogic;
+			_context = context;
 		}
 
 		public async Task HandleOrderAsync(string message)
@@ -28,11 +27,8 @@ namespace CouriersWebService.Services
 
 			var order = JsonConvert.DeserializeObject<Order>(message);
 
-			using var scope = _scopeFactory.CreateScope();
-			var context = scope.ServiceProvider.GetRequiredService<MainDbContext>();
-
-			var usersAddress = await context.UsersAddresses.FindAsync(order.UserAddressId);
-			var address = await context.Addresses.FindAsync(usersAddress.AddressId);
+			var usersAddress = await _context.UsersAddresses.FindAsync(order.UserAddressId);
+			var address = await _context.Addresses.FindAsync(usersAddress.AddressId);
 
 			var coords = (address.Longitude, address.Latitude);
 			var correctCourier = await GetCorrectCourierAsync(coords);
@@ -45,21 +41,21 @@ namespace CouriersWebService.Services
 
 			var orderInfo = "Order To handle";
 
-			var couriersHub = new CouriersHub(_couriersCacheLogic);
-			await couriersHub.SendOrderInfoAsync(correctCourier?.Login, orderInfo);
+			var couriersHub = new CouriersHub();
+
+			await couriersHub.SendOrderInfoAsync(correctCourier?.SignalRConnectionId, orderInfo);
 		}
 
 		private async Task<Courier> GetCorrectCourierAsync((double Longitude, double Latitude) coords)
 		{
-			var couriersKeys = await _couriersCacheLogic.GetCouriersKeysAsync();
-			if (couriersKeys.Count == 0)
-				return null;
-
-			var allCouriers = await _couriersCacheLogic.GetCouriersByKeysAsync(couriersKeys);
+			var allCouriers = await _couriersCacheLogic.GetCouriersAsync();
 			var activeCouriers = allCouriers?
 				.Where(c => c.Status == CourierStatus.Active)
 				.Select(c => (Courier: c, Value: GetDeltaCoords(coords, (c.Longitude, c.Latitude))))
 				.ToArray();
+
+			if (activeCouriers.Length == 0)
+				return null;
 
 			var minValue = activeCouriers.Min(c => c.Value);
 

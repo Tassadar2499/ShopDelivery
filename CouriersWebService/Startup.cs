@@ -35,7 +35,8 @@ namespace CouriersWebService
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
 
 			services.AddScoped<HttpClient>();
-			services.AddSingleton<OrdersLogic>();
+			services.AddScoped<OrdersLogic>();
+			services.AddScoped<CouriersAuthLogic>();
 			services.AddSingleton<CouriersCacheLogic>();
 
 			services.AddResponseCompression

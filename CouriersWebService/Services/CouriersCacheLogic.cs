@@ -36,7 +36,25 @@ namespace CouriersWebService.Services
 			await RedisDatabase.RemoveAsync(courierKey);
 		}
 
-		public async Task<HashSet<string>> GetCouriersKeysAsync()
+		public async Task<Courier> GetCourierByLoginAsync(string login)
+		{
+			var couriers = await GetCouriersAsync();
+
+			return couriers.FirstOrDefault(c => c.Login == login);
+		}
+
+		public async Task<IEnumerable<Courier>> GetCouriersAsync()
+		{
+			var keys = await GetCouriersKeysAsync();
+			if (keys == null || keys.Count == 0)
+				return Enumerable.Empty<Courier>();
+
+			var couriersDict = await RedisDatabase.GetAllAsync<Courier>(keys);
+
+			return couriersDict.Select(kv => kv.Value);
+		}
+
+		private async Task<HashSet<string>> GetCouriersKeysAsync()
 		{
 			var couriersIdStr = await RedisDatabase.GetAsync<string>(COURIERS_KEY);
 
@@ -47,27 +65,11 @@ namespace CouriersWebService.Services
 				.ToHashSet();
 		}
 
-		public async Task<Courier> GetCourierByLogin(string login)
-		{
-			var keys = await GetCouriersKeysAsync();
-			var couriers = await GetCouriersByKeysAsync(keys);
-
-			return couriers.FirstOrDefault(c => c.Login == login);
-		}
-
-		public async Task<IEnumerable<Courier>> GetCouriersByKeysAsync(IEnumerable<string> keys)
-		{
-			var couriersDict = await RedisDatabase.GetAllAsync<Courier>(keys);
-
-			return couriersDict.Select(kv => kv.Value);
-		}
-
 		private async Task UpdateCouriersIdStorageAsync(string key, Action<HashSet<string>, string> setAction)
 		{
 			var couriersIdStr = await RedisDatabase.GetAsync<string>(COURIERS_KEY) ?? "";
 			var couriersIdSet = couriersIdStr.Split(';').ToHashSet();
 			setAction.Invoke(couriersIdSet, key);
-			couriersIdSet.Remove(key);
 			var newCouriersIdStr = string.Join(';', couriersIdSet);
 			await RedisDatabase.SetAddAsync(COURIERS_KEY, newCouriersIdStr);
 		}

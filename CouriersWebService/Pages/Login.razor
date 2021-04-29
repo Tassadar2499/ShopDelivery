@@ -2,9 +2,11 @@
 
 @using CouriersWebService.Data
 @using System.Net.Http.Json;
+@using CouriersWebService.Services;
 
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
+@inject CouriersAuthLogic couriersAuthLogic
 
 <h3>Register</h3>
 
@@ -15,7 +17,7 @@
 	<InputText id="login" @bind-Value="AuthData.Login" />
 	<InputText type="password" placeholder="Password" @bind-Value="@AuthData.Password" />
 
-	<button type="submit">Register</button>
+	<button type="submit">Login</button>
 </EditForm>
 
 @code {
@@ -27,5 +29,14 @@
 	}
 
 	private async Task HandleLogin()
-		 => await httpClient.PostAsJsonAsync($"{navigationManager.BaseUri}Auth/Login", AuthData).ConfigureAwait(false);
+	{
+		var isSuccess = await couriersAuthLogic.LoginAsync(AuthData);
+		if (isSuccess)
+		{
+			var baseUrl = navigationManager.BaseUri;
+			var url = $"{baseUrl}Auth/SetCookie?login={AuthData.Login}";
+			await httpClient.GetAsync(url);
+			navigationManager.NavigateTo($"{baseUrl}/courierinfo");
+		}
+	}
 }

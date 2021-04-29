@@ -1,8 +1,10 @@
 ﻿using CouriersWebService.Data;
 using Isopoh.Cryptography.Argon2;
+using Microsoft.EntityFrameworkCore;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,22 +25,27 @@ namespace CouriersWebService.Services
 			_context = context;
 		}
 
-		public async Task UpdateAsync(UpdateCourierData courierData, string login)
+		public async Task UpdateAsync([DisallowNull] UpdateCourierData courierData)
 		{
-			var courier = await _couriersCacheLogic.GetCourierByLogin(login);
+			var login = courierData.Login;
+			var courier = await _couriersCacheLogic.GetCourierByLoginAsync(login)
+				?? await _context.Couriers.FirstOrDefaultAsync(c => c.Login == login);
 
 			courier.Status = CourierStatus.Active;
 			courier.Longitude = courierData.Longitude;
 			courier.Latitude = courier.Latitude;
+			courier.SignalRConnectionId = courierData.SignalRConnectionId;
 
 			await _couriersCacheLogic.UpdateAsync(courier);
 		}
 
-		public bool Login(AuthData loginData)
+		public async Task<bool> LoginAsync([DisallowNull] AuthData loginData)
 		{
-			var courier = Couriers.FirstOrDefault(l => loginData.Login == l.Login);
+			var courier = await Couriers.FirstOrDefaultAsync(l => loginData.Login == l.Login);
+			if (courier == null)
+				return false;
 
-			return courier != null && courier.Password == Argon2.Hash(loginData.Password);
+			return Argon2.Verify(courier.Password, loginData.Password);
 		}
 
 		public async Task RegisterAsync(AuthData registerData)

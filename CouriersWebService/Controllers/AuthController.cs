@@ -26,9 +26,23 @@ namespace CouriersWebService.Controllers
 		[HttpPost("Login")]
 		public async Task LoginAsync([FromBody] AuthData authData)
 		{
-			var isSuccess = _authLogic.Login(authData);
+			var isSuccess = await _authLogic.LoginAsync(authData);
 			if (isSuccess)
 				Cookies.Append(LOGIN_KEY, authData.Login);
+		}
+
+		[HttpGet("SetCookie/{login?}")]
+		public void SetCookie([FromQuery] string login)
+		{
+			Cookies.Append(LOGIN_KEY, login);
+		}
+
+		[HttpGet("GetCookie")]
+		public async Task GetCookieAsync()
+		{
+			_ = HttpContext.Request.Cookies.TryGetValue(LOGIN_KEY, out var login);
+			var cookieData = new CookieData() { Login = login };
+			await HttpContext.Response.WriteAsJsonAsync(cookieData);
 		}
 	}
 }
