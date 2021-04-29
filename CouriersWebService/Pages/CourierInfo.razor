@@ -40,7 +40,8 @@
 
 		await HubConnection.StartAsync();
 
-		var cookieData = await HttpClient.GetFromJsonAsync<CookieData>($"{NavigationManager.BaseUri}Auth/GetCookie");
+		var url = $"{NavigationManager.BaseUri}Cookies/GetCookie";
+		var cookieData = await HttpClient.GetFromJsonAsync<CookieData>(url);
 		var random = new Random();
 		var updateCourierData = new UpdateCourierData()
 		{

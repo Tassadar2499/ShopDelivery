@@ -34,7 +34,7 @@
 		if (isSuccess)
 		{
 			var baseUrl = navigationManager.BaseUri;
-			var url = $"{baseUrl}Auth/SetCookie?login={AuthData.Login}";
+			var url = $"{baseUrl}Cookies/SetCookie?login={AuthData.Login}";
 			await httpClient.GetAsync(url);
 			navigationManager.NavigateTo($"{baseUrl}/courierinfo");
 		}

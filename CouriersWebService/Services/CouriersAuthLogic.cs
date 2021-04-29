@@ -37,6 +37,7 @@ namespace CouriersWebService.Services
 			courier.SignalRConnectionId = courierData.SignalRConnectionId;
 
 			await _couriersCacheLogic.UpdateAsync(courier);
+			Console.WriteLine("Courier updated");
 		}
 
 		public async Task<bool> LoginAsync([DisallowNull] AuthData loginData)

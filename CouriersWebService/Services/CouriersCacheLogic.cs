@@ -23,7 +23,7 @@ namespace CouriersWebService.Services
 			if (!isCourierInCache)
 				await UpdateCouriersIdStorageAsync(courierKey, (s, k) => s.Add(k));
 
-			await RedisDatabase.SetAddAsync(courierKey, courier);
+			await RedisDatabase.AddAsync(courierKey, courier);
 		}
 
 		public async Task RemoveAsync(Courier courier)
@@ -71,7 +71,7 @@ namespace CouriersWebService.Services
 			var couriersIdSet = couriersIdStr.Split(';').ToHashSet();
 			setAction.Invoke(couriersIdSet, key);
 			var newCouriersIdStr = string.Join(';', couriersIdSet);
-			await RedisDatabase.SetAddAsync(COURIERS_KEY, newCouriersIdStr);
+			await RedisDatabase.AddAsync(COURIERS_KEY, newCouriersIdStr);
 		}
 	}
 }

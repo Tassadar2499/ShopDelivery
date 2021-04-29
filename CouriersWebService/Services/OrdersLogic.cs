@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using ShopsDbEntities;
+﻿using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using ShopsDbEntities.Entities.ProductEntities;
-using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,12 +18,8 @@ namespace CouriersWebService.Services
 			_context = context;
 		}
 
-		public async Task HandleOrderAsync(string message)
+		public async Task HandleOrderAsync(Order order)
 		{
-			//{ "Id": 1, "BucketProducts": "[2, 4, 4, 2, 5]", "UserAddressId": 1 }
-
-			var order = JsonConvert.DeserializeObject<Order>(message);
-
 			var usersAddress = await _context.UsersAddresses.FindAsync(order.UserAddressId);
 			var address = await _context.Addresses.FindAsync(usersAddress.AddressId);
 

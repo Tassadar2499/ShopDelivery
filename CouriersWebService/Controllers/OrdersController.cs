@@ -17,8 +17,9 @@ namespace CouriersWebService.Controllers
 		[HttpPost("Handle")]
 		public async Task HandleOrderAsync([FromBody] Order order)
 		{
-			var gg = 0;
+			//{ "Id": 1, "BucketProducts": "[2, 4, 4, 2, 5]", "UserAddressId": 1 }
 			Console.WriteLine("Recieved order");
+			await _manager.HandleOrderAsync(order);
 		}
 	}
 }
