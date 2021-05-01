@@ -37,6 +37,7 @@ namespace CouriersWebService
 			services.AddScoped<HttpClient>();
 			services.AddScoped<OrdersLogic>();
 			services.AddScoped<CouriersAuthLogic>();
+			services.AddScoped<CouriersNotifyService>();
 			services.AddSingleton<CouriersCacheLogic>();
 
 			services.AddResponseCompression

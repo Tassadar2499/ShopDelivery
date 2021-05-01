@@ -11,11 +11,13 @@ namespace CouriersWebService.Services
 	{
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
+		private readonly CouriersNotifyService _couriersNotifyService;
 
-		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
+		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, CouriersNotifyService couriersNotifyService)
 		{
 			_couriersCacheLogic = couriersCacheLogic;
 			_context = context;
+			_couriersNotifyService = couriersNotifyService;
 		}
 
 		public async Task HandleOrderAsync(Order order)
@@ -34,9 +36,7 @@ namespace CouriersWebService.Services
 
 			var orderInfo = "Order To handle";
 
-			var couriersHub = new CouriersHub();
-
-			await couriersHub.SendOrderInfoAsync(correctCourier?.SignalRConnectionId, orderInfo);
+			await _couriersNotifyService.SendNotificationAsync(correctCourier.SignalRConnectionId, orderInfo);
 		}
 
 		private async Task<Courier> GetCorrectCourierAsync((double Longitude, double Latitude) coords)
