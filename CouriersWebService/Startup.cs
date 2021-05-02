@@ -74,13 +74,6 @@ namespace CouriersWebService
 
 			app.UseRouting();
 
-			//app.UseCookiePolicy(new CookiePolicyOptions
-			//{
-			//	MinimumSameSitePolicy = SameSiteMode.Strict,
-			//	HttpOnly = HttpOnlyPolicy.Always,
-			//	Secure = CookieSecurePolicy.Always,
-			//});
-
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapBlazorHub();
