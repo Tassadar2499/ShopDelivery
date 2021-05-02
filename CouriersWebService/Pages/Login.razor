@@ -32,11 +32,6 @@
 	{
 		var isSuccess = await couriersAuthLogic.LoginAsync(AuthData);
 		if (isSuccess)
-		{
-			var baseUrl = navigationManager.BaseUri;
-			var url = $"{baseUrl}Cookies/SetCookie?login={AuthData.Login}";
-			await httpClient.GetAsync(url);
-			navigationManager.NavigateTo($"{baseUrl}/courierinfo");
-		}
+			navigationManager.NavigateTo($"{navigationManager.BaseUri}/courierinfo?login={AuthData.Login}");
 	}
 }

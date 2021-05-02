@@ -31,6 +31,9 @@ namespace CouriersWebService.Services
 			var courier = await _couriersCacheLogic.GetCourierByLoginAsync(login)
 				?? await _context.Couriers.FirstOrDefaultAsync(c => c.Login == login);
 
+			if (courier == null)
+				return;
+
 			courier.Status = CourierStatus.Active;
 			courier.Longitude = courierData.Longitude;
 			courier.Latitude = courier.Latitude;

@@ -1,6 +1,8 @@
 using CouriersWebService.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -73,6 +75,13 @@ namespace CouriersWebService
 			app.UseStaticFiles();
 
 			app.UseRouting();
+
+			//app.UseCookiePolicy(new CookiePolicyOptions
+			//{
+			//	MinimumSameSitePolicy = SameSiteMode.Strict,
+			//	HttpOnly = HttpOnlyPolicy.Always,
+			//	Secure = CookieSecurePolicy.Always,
+			//});
 
 			app.UseEndpoints(endpoints =>
 			{
