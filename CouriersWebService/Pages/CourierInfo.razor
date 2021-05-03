@@ -33,24 +33,45 @@
 			.WithUrl(navigationManager.ToAbsoluteUri("/couriershub"))
 			.Build();
 
-		HubConnection.On<string>("RecieveOrderInfo", message =>
-		{
-			Messages.Add(message);
-			StateHasChanged();
-		});
+		HubConnection.On<string>("RecieveOrderInfo", OnStartConnection);
+		HubConnection.Closed += OnCloseConnectionAsync;
 
 		await HubConnection.StartAsync();
 
+		var updateCourierData = GetUpdateCourierData();
+		await authLogic.UpdateAsync(updateCourierData);
+	}
+
+	private void OnStartConnection(string message)
+	{
+		Messages.Add(message);
+		StateHasChanged();
+	}
+
+	private async Task OnCloseConnectionAsync(Exception ex)
+	{
+		if (ex == null)
+		{
+			Console.WriteLine("Connection closed");
+		}
+		else
+		{
+			Console.WriteLine($"Error - {ex}");
+		}
+
+		Messages.Clear();
+	}
+
+	private UpdateCourierData GetUpdateCourierData()
+	{
 		var random = new Random();
-		var updateCourierData = new UpdateCourierData()
+		return new UpdateCourierData()
 		{
 			Login = GetLogin(),
 			SignalRConnectionId = HubConnection.ConnectionId,
 			Longitude = random.Next(1000) + random.NextDouble(),
 			Latitude = random.Next(1000) + random.NextDouble()
 		};
-
-		await authLogic.UpdateAsync(updateCourierData);
 	}
 
 	private string GetLogin()

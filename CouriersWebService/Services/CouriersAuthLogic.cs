@@ -66,5 +66,17 @@ namespace CouriersWebService.Services
 
 			await _context.CreateAndSaveAsync(courier);
 		}
+
+		public async Task RemoveAsync(string login)
+		{
+			var courier = await _couriersCacheLogic.GetCourierByLoginAsync(login);
+			if (courier == null)
+			{
+				//TODO: Log
+				return;
+			}
+
+			await _couriersCacheLogic.RemoveAsync(courier);
+		}
 	}
 }
