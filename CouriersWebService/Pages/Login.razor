@@ -36,7 +36,7 @@
 		if (isSuccess)
 		{
 			await localStorage.SetItemAsync("login", AuthData.Login);
-			navigationManager.NavigateTo($"{navigationManager.BaseUri}/courierinfo");
+			navigationManager.NavigateTo(navigationManager.BaseUri, true);
 		}
 		else
 		{
