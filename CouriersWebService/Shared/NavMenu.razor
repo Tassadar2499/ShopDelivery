@@ -1,4 +1,8 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using Blazored.LocalStorage
+
+@inject ILocalStorageService localStorage
+
+<div class="top-row pl-4 navbar navbar-dark">
 	<a class="navbar-brand" href="">CouriersWebService</a>
 	<button class="navbar-toggler" @onclick="ToggleNavMenu">
 		<span class="navbar-toggler-icon"></span>
@@ -29,5 +33,12 @@
 	private void ToggleNavMenu()
 	{
 		collapseNavMenu = !collapseNavMenu;
+	}
+
+	private async Task<bool> IsLoggedInAsync()
+	{
+		var login = await localStorage.GetItemAsStringAsync("login");
+
+		return !string.IsNullOrEmpty(login);
 	}
 }

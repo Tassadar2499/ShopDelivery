@@ -1,4 +1,5 @@
-﻿using ShopsDbEntities;
+﻿using Microsoft.Extensions.Logging;
+using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using ShopsDbEntities.Entities.ProductEntities;
 using System;
@@ -12,12 +13,14 @@ namespace CouriersWebService.Services
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
 		private readonly CouriersNotifyService _couriersNotifyService;
+		private readonly ILogger<OrdersLogic> _logger;
 
-		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, CouriersNotifyService couriersNotifyService)
+		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, CouriersNotifyService couriersNotifyService, ILogger<OrdersLogic> logger)
 		{
 			_couriersCacheLogic = couriersCacheLogic;
 			_context = context;
 			_couriersNotifyService = couriersNotifyService;
+			_logger = logger;
 		}
 
 		public async Task HandleOrderAsync(Order order)
@@ -27,9 +30,12 @@ namespace CouriersWebService.Services
 
 			var coords = (address.Longitude, address.Latitude);
 			var correctCourier = await GetCorrectCourierAsync(coords);
-			//TODO: fix it
+			
 			if (correctCourier == null)
+			{
+				_logger.LogError("Cannot find any correct courier");
 				return;
+			}
 
 			correctCourier.Status = CourierStatus.Work;
 			await _couriersCacheLogic.UpdateAsync(correctCourier);
@@ -48,7 +54,10 @@ namespace CouriersWebService.Services
 				.ToArray();
 
 			if (activeCouriers.Length == 0)
+			{
+				_logger.LogInformation("There is no any active couriers");
 				return null;
+			}
 
 			var minValue = activeCouriers.Min(c => c.Value);
 

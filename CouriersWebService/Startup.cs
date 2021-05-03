@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using CouriersWebService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ namespace CouriersWebService
 			services.AddServerSideBlazor();
 			services.AddControllers();
 			services.AddSignalR();
+			services.AddBlazoredLocalStorage();
 
 			var redisConfiguration = Configuration.GetSection("Redis").Get<RedisConfiguration>();
 			services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(redisConfiguration);

@@ -13,5 +13,8 @@ namespace ShopsDbEntities.Entities.ProductEntities
 
 		[JsonProperty]
 		public string BucketProducts { get; set; }
+
+		public override string ToString()
+			=> $"Id = {Id}; UserAddressId = {UserAddressId}; Bucket = {BucketProducts}";
 	}
 }

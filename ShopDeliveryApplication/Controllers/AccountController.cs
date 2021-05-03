@@ -80,7 +80,6 @@ namespace ShopDeliveryApplication.Controllers
 			if (user != null && !await UserManager.IsEmailConfirmedAsync(user))
 			{
 				ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
-
 				return View(loginData);
 			}
 

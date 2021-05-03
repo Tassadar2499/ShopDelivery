@@ -2,13 +2,14 @@
 
 @using Microsoft.AspNetCore.SignalR.Client
 @using CouriersWebService.Data
-@using System.Net.Http.Json;
-@using CouriersWebService.Services;
-@using System.Web;
+@using CouriersWebService.Services
+@using Microsoft.Extensions.Logging
+@using Blazored.LocalStorage
 
 @inject NavigationManager navigationManager
-@inject HttpClient HttpClient
 @inject CouriersAuthLogic authLogic
+@inject ILogger<CourierInfo> logger
+@inject ILocalStorageService localStorage
 
 @implements IAsyncDisposable
 
@@ -38,7 +39,7 @@
 
 		await HubConnection.StartAsync();
 
-		var updateCourierData = GetUpdateCourierData();
+		var updateCourierData = await GetUpdateCourierDataAsync();
 		await authLogic.UpdateAsync(updateCourierData);
 	}
 
@@ -50,37 +51,30 @@
 
 	private async Task OnCloseConnectionAsync(Exception ex)
 	{
-		if (ex == null)
-		{
-			Console.WriteLine("Connection closed");
-		}
-		else
-		{
-			Console.WriteLine($"Error - {ex}");
-		}
+		logger.LogInformation("Connection closed");
+		if (ex != null)
+			logger.LogError($"Error - {ex}");
 
 		Messages.Clear();
+		var login = await GetLoginAsync();
+		await authLogic.RemoveAsync(login);
 	}
 
-	private UpdateCourierData GetUpdateCourierData()
+	private async Task<UpdateCourierData> GetUpdateCourierDataAsync()
 	{
 		var random = new Random();
+		var login = await GetLoginAsync();
 		return new UpdateCourierData()
 		{
-			Login = GetLogin(),
+			Login = login,
 			SignalRConnectionId = HubConnection.ConnectionId,
 			Longitude = random.Next(1000) + random.NextDouble(),
 			Latitude = random.Next(1000) + random.NextDouble()
 		};
 	}
 
-	private string GetLogin()
-	{
-		var uriBuilder = new UriBuilder(navigationManager.Uri);
-		var queryParams = HttpUtility.ParseQueryString(uriBuilder.Query);
-
-		return queryParams["login"];
-	}
+	private async Task<string> GetLoginAsync()
+		=> await localStorage.GetItemAsStringAsync("login");
 
 	public bool IsConnected =>
 		HubConnection.State == HubConnectionState.Connected;
