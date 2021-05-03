@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using ShopsDbEntities.Entities.ProductEntities;
@@ -8,20 +9,13 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class OrdersLogic
+	[Inject]
+	public partial class OrdersLogic
 	{
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
 		private readonly CouriersNotifyService _couriersNotifyService;
 		private readonly ILogger<OrdersLogic> _logger;
-
-		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, CouriersNotifyService couriersNotifyService, ILogger<OrdersLogic> logger)
-		{
-			_couriersCacheLogic = couriersCacheLogic;
-			_context = context;
-			_couriersNotifyService = couriersNotifyService;
-			_logger = logger;
-		}
 
 		public async Task HandleOrderAsync(Order order)
 		{
@@ -30,7 +24,7 @@ namespace CouriersWebService.Services
 
 			var coords = (address.Longitude, address.Latitude);
 			var correctCourier = await GetCorrectCourierAsync(coords);
-			
+
 			if (correctCourier == null)
 			{
 				_logger.LogError("Cannot find any correct courier");

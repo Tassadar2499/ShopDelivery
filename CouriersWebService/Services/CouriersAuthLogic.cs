@@ -1,4 +1,5 @@
 ﻿using CouriersWebService.Data;
+using HarabaSourceGenerators.Common.Attributes;
 using Isopoh.Cryptography.Argon2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,20 +12,14 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class CouriersAuthLogic
+	[Inject]
+	public partial class CouriersAuthLogic
 	{
 		public const string COURIERS_KEY = "couriers_id";
 
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
 		private readonly ILogger<CouriersAuthLogic> _logger;
-
-		public CouriersAuthLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, ILogger<CouriersAuthLogic> logger)
-		{
-			_couriersCacheLogic = couriersCacheLogic;
-			_context = context;
-			_logger = logger;
-		}
 
 		private IQueryable<Courier> Couriers => _context.Couriers;
 

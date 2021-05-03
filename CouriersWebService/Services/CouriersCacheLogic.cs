@@ -1,17 +1,17 @@
-﻿using ShopsDbEntities.Entities;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using ShopsDbEntities.Entities;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
 	//TODO: Добавить обработку исключений
-
-	public class CouriersCacheLogic
+	[Inject]
+	public partial class CouriersCacheLogic
 	{
 		private const string COURIERS_KEY = "couriers_id";
 		private const string COURIER_PREFIX = "Courier";
@@ -19,8 +19,6 @@ namespace CouriersWebService.Services
 		private readonly IRedisCacheClient _redisCacheClient;
 		public IRedisDatabase RedisComplex => _redisCacheClient.Db0;
 		public IDatabase RedisSimple => RedisComplex.Database;
-
-		public CouriersCacheLogic(IRedisCacheClient redisCacheClient) => _redisCacheClient = redisCacheClient;
 
 		public async Task UpdateAsync(Courier courier)
 		{

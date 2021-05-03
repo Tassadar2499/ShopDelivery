@@ -1,24 +1,19 @@
 ﻿using CouriersWebService.Services;
+using HarabaSourceGenerators.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ShopsDbEntities.Entities.ProductEntities;
-using System;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class OrdersController : ControllerBase
+	[Inject]
+	public partial class OrdersController : ControllerBase
 	{
 		private readonly OrdersLogic _manager;
 		private readonly ILogger<OrdersController> _logger;
-
-		public OrdersController(OrdersLogic manager, ILogger<OrdersController> logger)
-		{
-			_manager = manager;
-			_logger = logger;
-		}
 
 		[HttpPost("Handle")]
 		public async Task HandleOrderAsync([FromBody] Order order)
