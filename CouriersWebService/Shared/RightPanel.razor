@@ -40,6 +40,13 @@
 
 		logger.LogInformation("Right panel render");
 
+		await InitializeHubClientAsync();
+
+		StateHasChanged();
+	}
+
+	private async Task InitializeHubClientAsync()
+	{
 		Messages = new List<string>();
 
 		IsLoggedIn = await IsContainsLoginAsync();
@@ -57,8 +64,6 @@
 
 		var updateCourierData = await GetUpdateCourierDataAsync();
 		await authLogic.UpdateAsync(updateCourierData);
-
-		StateHasChanged();
 	}
 
 	private async Task<UpdateCourierData> GetUpdateCourierDataAsync()
