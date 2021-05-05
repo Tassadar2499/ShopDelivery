@@ -70,12 +70,15 @@ namespace CouriersWebService.Services
 		{
 			var redisValue = await RedisSimple.StringGetAsync(COURIERS_KEY);
 
-			if (redisValue.IsNull || !redisValue.HasValue || redisValue.IsNullOrEmpty)
+			if (redisValue.IsNullOrEmpty)
 				return new HashSet<string>() { };
+
+			var jj = redisValue.ToString();
 
 			return redisValue
 				.ToString()
 				.Split(';')
+				.Select(s => s.Replace("\"", string.Empty))
 				.Where(k => k.StartsWith(COURIER_PREFIX))
 				.ToHashSet();
 		}

@@ -52,11 +52,12 @@
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender)
-		{
-			IsLoggedIn = await IsContainsLoginAsync();
+		if (!firstRender)
+			return;
+
+		IsLoggedIn = await IsContainsLoginAsync();
+		if (IsLoggedIn)
 			StateHasChanged();
-		}
 	}
 
 	private async Task LogOutAsync()
