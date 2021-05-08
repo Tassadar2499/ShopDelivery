@@ -17,7 +17,9 @@ namespace ShopsDbEntities.Logic
 
 		public void CreateOrUpdateProducts(IEnumerable<Product> products)
 		{
-			var (toUpdate, toCreate) = products.SplitCollection(p => Products.Any(o => o.Id == p.Id));
+			var (toUpdate, toCreate) = products
+				.Where(p => p != null)
+				.SplitCollection(p => Products.Any(p.Equals));
 
 			Parallel.Invoke
 			(

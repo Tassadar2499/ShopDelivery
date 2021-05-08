@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace ShopsDbEntities
 {
@@ -28,5 +29,15 @@ namespace ShopsDbEntities
 
 		[JsonProperty]
 		public string ImageUrl { get; set; }
+
+		public override bool Equals(object obj)
+			=> obj is Product product &&
+				   ShopType == product.ShopType &&
+				   Category == product.Category &&
+				   SubCategory == product.SubCategory &&
+				   Name == product.Name;
+
+		public override int GetHashCode()
+			=> HashCode.Combine(ShopType, Category, SubCategory, Name);
 	}
 }
