@@ -42,13 +42,12 @@ namespace ShopsDbEntities.Logic
 			UpdateProducts(toUpdateProducts, toUpdateParsedProducts.ToImmutableHashSet());
 			Context.UpdateRange(toUpdateProducts);
 
-			var toCreateProducts = toCreateParsedProducts.ConvertParsedProducts();
-			Context.AddRange(toCreateProducts.Select(t => t.Product));
+			var toCreateProductsInfo = toCreateParsedProducts.ConvertParsedProducts().ToArray();
+			Context.AddRange(toCreateProductsInfo.Select(t => t.Product));
 			Context.SaveChanges();
 
-			var imagesUpdatedProducts = _imageLogic.LoadProductImagesToBlob(toCreateProducts);
-			Context.UpdateRange(imagesUpdatedProducts);
-			Context.SaveChanges();
+			var imagesDict = ProductsInfoToDict(toCreateProductsInfo);
+			UploadImagesToProducts(imagesDict);
 		}
 
 		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
@@ -61,36 +60,46 @@ namespace ShopsDbEntities.Logic
 				.Where(p => (byte)p.SubCategory == subCategoryId)
 				.ToArray();
 
+		private void UploadImagesToProducts(Dictionary<long, string> images)
+		{
+			var productsSet = GetProductsByIdSet(images.Keys.ToHashSet()).ToHashSet();
+			var productsInfoCollection = images.Select(kv => (Product: productsSet.First(p => p.Id == kv.Key), SiteUrl: kv.Value));
+			var imagesUpdatedProducts = _imageLogic.LoadProductImagesToBlob(productsInfoCollection);
+			Context.UpdateRange(imagesUpdatedProducts);
+			Context.SaveChanges();
+		}
+
 		private ImmutableHashSet<Product> GetProductsToUpdate(ParsedProduct[] products)
 		{
 			var namesSet = products.Select(p => p.Name).ToImmutableHashSet();
-			Expression<Func<Product, bool>> namesExpression = p => namesSet.Contains(p.Name);
-
 			var subCategoriesSet = products.Select(p => p.SubCategory).ToImmutableHashSet();
-			Expression<Func<Product, bool>> subCategoriesExpression = p => subCategoriesSet.Contains(p.SubCategory);
-
 			var categoriesSet = products.Select(p => p.Category).ToImmutableHashSet();
-			Expression<Func<Product, bool>> categoriesExpression = p => categoriesSet.Contains(p.Category);
-
 			var shopTypesSet = products.Select(p => p.ShopType).ToImmutableHashSet();
-			Expression<Func<Product, bool>> shopTypesExpression = p => shopTypesSet.Contains(p.ShopType);
 
 			return Products
-				.Where(namesExpression)
-				.Where(subCategoriesExpression)
-				.Where(categoriesExpression)
-				.Where(shopTypesExpression)
+				.WhereByExpression(p => namesSet.Contains(p.Name))
+				.WhereByExpression(p => subCategoriesSet.Contains(p.SubCategory))
+				.WhereByExpression(p => categoriesSet.Contains(p.Category))
+				.WhereByExpression(p => shopTypesSet.Contains(p.ShopType))
 				.ToImmutableHashSet();
 		}
 
-		private void UpdateProducts(IEnumerable<Product> toUpdateProducts, ImmutableHashSet<ParsedProduct> toUpdateParsedProducts)
+		private static void UpdateProducts(IEnumerable<Product> toUpdateProducts, ImmutableHashSet<ParsedProduct> toUpdateParsedProducts)
 			=> Parallel.ForEach(toUpdateProducts, p => UpdateProduct(toUpdateParsedProducts, p));
 
-		private void UpdateProduct(ImmutableHashSet<ParsedProduct> toUpdateParsedProducts, Product productToUpdate)
+		private static void UpdateProduct(ImmutableHashSet<ParsedProduct> toUpdateParsedProducts, Product productToUpdate)
 		{
-			var parsedProduct = toUpdateParsedProducts.First(u => ProductDataComparer.IsParsedProductEqualToProduct(u, productToUpdate));
+			var parsedProduct = toUpdateParsedProducts.FirstOrDefault(u => ProductDataComparer.IsParsedProductEqualToProduct(u, productToUpdate))
+				?? throw new Exception("Cannot find any parsed product");
+
 			productToUpdate.Price = parsedProduct.Price;
 			productToUpdate.Mass = parsedProduct.Mass;
 		}
+
+		private static Dictionary<long, string> ProductsInfoToDict(IEnumerable<(Product Product, string SiteUrl)> productsInfo)
+			=> productsInfo
+				.Select(t => (t.Product.Id, t.SiteUrl))
+				.GroupBy(t => t.Id)
+				.ToDictionary(g => g.Key, g => g.First().SiteUrl);
 	}
 }

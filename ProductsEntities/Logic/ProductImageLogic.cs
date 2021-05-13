@@ -34,6 +34,8 @@ namespace ShopsDbEntities.Logic
 			webClient.Headers.Add(USER_AGENT, BROWSER_HEADER);
 			using var memoryStream = webClient.OpenRead(siteUrl);
 
+			//TODO: Некорректный Id
+
 			var imageName = $"{product.Id}.jpg";
 			containerClient.UploadBlob(imageName, memoryStream);
 			product.ImageUrl = $"{containerClient.Uri.AbsoluteUri}/{imageName}";
