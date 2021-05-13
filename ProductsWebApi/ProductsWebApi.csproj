@@ -3,12 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>8cbefc77-9d6d-4668-9522-f4c61f4bac6f</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.8.3" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.12" />
     <PackageReference Include="OData.Swagger" Version="1.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
   </ItemGroup>
