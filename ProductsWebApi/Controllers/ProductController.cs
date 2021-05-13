@@ -13,18 +13,12 @@ namespace ProductsWebApi.Controllers
 	public class ProductController : ControllerBase
 	{
 		private readonly ProductsLogic _logic;
-		private MainDbContext Context => _logic.Context;
 		private IQueryable<Product> Products => _logic.Products;
-
 		public ProductController(ProductsLogic logic) => _logic = logic;
 
 		[HttpPost("createorupdate")]
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
 			=> await _logic.CreateOrUpdateProductsAsync(productData.Products);
-
-		[HttpPut("create")]
-		public async Task CreateAsync([FromBody] Product product)
-			=> await Context.CreateAndSaveAsync(product);
 
 		[HttpGet]
 		public async Task<List<Product>> Get()

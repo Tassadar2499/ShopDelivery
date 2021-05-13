@@ -36,7 +36,7 @@ namespace ShopsDbEntities.Logic
 
 			var imageName = $"{product.Id}.jpg";
 			containerClient.UploadBlob(imageName, memoryStream);
-			product.ImageUrl = containerClient.Uri.AbsoluteUri;
+			product.ImageUrl = $"{containerClient.Uri.AbsoluteUri}/{imageName}";
 
 			return product;
 		}

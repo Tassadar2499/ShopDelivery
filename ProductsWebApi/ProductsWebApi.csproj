@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductsEntities\ShopsDbEntities.csproj" />
+    <ProjectReference Include="..\ProductsEntities\ShopsDbLogic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

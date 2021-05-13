@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ShopsDbEntities.Logic
@@ -16,8 +17,8 @@ namespace ShopsDbEntities.Logic
 		public MainDbContext Context { get; }
 		public IQueryable<Product> Products => Context.Products;
 
-		private readonly Lazy<ProductImageLogic> _imageLogic;
-		public ProductsLogic(MainDbContext context, Lazy<ProductImageLogic> imageLogic)
+		private readonly ProductImageLogic _imageLogic;
+		public ProductsLogic(MainDbContext context, ProductImageLogic imageLogic)
 		{
 			_imageLogic = imageLogic;
 			Context = context;
@@ -32,43 +33,26 @@ namespace ShopsDbEntities.Logic
 				.Where(p => p != null)
 				.ToArray();
 
-			var productsSet = filteredProducts
-				.Select(p => new ProductEqualityData(p.ShopType, p.Category, p.SubCategory, p.Name))
-				.ToImmutableHashSet();
-
-			var toUpdateProducts = GetProductsByEqualityDataSet(productsSet).ToImmutableHashSet();
+			var toUpdateProducts = GetProductsToUpdate(filteredProducts);
 
 			bool isProductToUpdate(ParsedProduct u)
 				=> toUpdateProducts.Any(p => ProductDataComparer.IsParsedProductEqualToProduct(u, p));
 
 			var (toUpdateParsedProducts, toCreateParsedProducts) = filteredProducts.SplitCollection(isProductToUpdate);
-
-			foreach (var productToUpdate in toUpdateProducts)
-			{
-				var parsedProduct = toUpdateParsedProducts.Find(u => ProductDataComparer.IsParsedProductEqualToProduct(u, productToUpdate));
-				productToUpdate.Price = parsedProduct.Price;
-				productToUpdate.Mass = parsedProduct.Mass;
-			}
-
+			UpdateProducts(toUpdateProducts, toUpdateParsedProducts.ToImmutableHashSet());
 			Context.UpdateRange(toUpdateProducts);
 
 			var toCreateProducts = toCreateParsedProducts.ConvertParsedProducts();
 			Context.AddRange(toCreateProducts.Select(t => t.Product));
 			Context.SaveChanges();
 
-			_imageLogic.Value.LoadProductImagesToBlob(toCreateProducts);
+			var imagesUpdatedProducts = _imageLogic.LoadProductImagesToBlob(toCreateProducts);
+			Context.UpdateRange(imagesUpdatedProducts);
 			Context.SaveChanges();
 		}
 
 		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
 			=> Products.WhereByExpression(p => idSet.Contains(p.Id));
-
-		public IQueryable<Product> GetProductsByEqualityDataSet(ImmutableHashSet<ProductEqualityData> productsSet)
-			=> Products
-				.Where(p => productsSet.Any(e => e.Name == p.Name))
-				.Where(p => productsSet.Any(e => e.SubCategory == p.SubCategory))
-				.Where(p => productsSet.Any(e => e.Category == p.Category))
-				.Where(p => productsSet.Any(e => e.ShopType == p.ShopType));
 
 		public Product[] GetCatalogProducts(byte shopId, byte categoryId, byte subCategoryId)
 			=> Products
@@ -76,5 +60,37 @@ namespace ShopsDbEntities.Logic
 				.Where(p => (byte)p.Category == categoryId)
 				.Where(p => (byte)p.SubCategory == subCategoryId)
 				.ToArray();
+
+		private ImmutableHashSet<Product> GetProductsToUpdate(ParsedProduct[] products)
+		{
+			var namesSet = products.Select(p => p.Name).ToImmutableHashSet();
+			Expression<Func<Product, bool>> namesExpression = p => namesSet.Contains(p.Name);
+
+			var subCategoriesSet = products.Select(p => p.SubCategory).ToImmutableHashSet();
+			Expression<Func<Product, bool>> subCategoriesExpression = p => subCategoriesSet.Contains(p.SubCategory);
+
+			var categoriesSet = products.Select(p => p.Category).ToImmutableHashSet();
+			Expression<Func<Product, bool>> categoriesExpression = p => categoriesSet.Contains(p.Category);
+
+			var shopTypesSet = products.Select(p => p.ShopType).ToImmutableHashSet();
+			Expression<Func<Product, bool>> shopTypesExpression = p => shopTypesSet.Contains(p.ShopType);
+
+			return Products
+				.Where(namesExpression)
+				.Where(subCategoriesExpression)
+				.Where(categoriesExpression)
+				.Where(shopTypesExpression)
+				.ToImmutableHashSet();
+		}
+
+		private void UpdateProducts(IEnumerable<Product> toUpdateProducts, ImmutableHashSet<ParsedProduct> toUpdateParsedProducts)
+			=> Parallel.ForEach(toUpdateProducts, p => UpdateProduct(toUpdateParsedProducts, p));
+
+		private void UpdateProduct(ImmutableHashSet<ParsedProduct> toUpdateParsedProducts, Product productToUpdate)
+		{
+			var parsedProduct = toUpdateParsedProducts.First(u => ProductDataComparer.IsParsedProductEqualToProduct(u, productToUpdate));
+			productToUpdate.Price = parsedProduct.Price;
+			productToUpdate.Mass = parsedProduct.Mass;
+		}
 	}
 }
