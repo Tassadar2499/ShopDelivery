@@ -1,16 +1,15 @@
-﻿using AutoMapper.Configuration;
+﻿using ShopsDbEntities;
 using ShopsDbEntities.Entities.Comparers;
 using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities.Logic;
 using ShopsDbEntities.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ShopsDbEntities.Logic
+namespace ProductsWebApi.Models.Logic
 {
 	public class ProductsLogic
 	{

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShopDeliveryApplication.Models.Logic;
 using ShopsDbEntities.Logic;
 
 namespace ShopDeliveryApplication.Controllers

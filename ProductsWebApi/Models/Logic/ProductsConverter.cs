@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace ShopsDbEntities.Logic
+namespace ProductsWebApi.Models.Logic
 {
 	public static class ProductsConverter
 	{
