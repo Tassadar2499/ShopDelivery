@@ -1,4 +1,5 @@
-﻿using ShopsDbEntities.Entities.Comparers;
+﻿using AutoMapper.Configuration;
+using ShopsDbEntities.Entities.Comparers;
 using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.Utils;
 using System;
@@ -15,15 +16,15 @@ namespace ShopsDbEntities.Logic
 		public MainDbContext Context { get; }
 		public IQueryable<Product> Products => Context.Products;
 
-		public ProductsLogic(MainDbContext context) => Context = context;
-
-		public async Task CreateOrUpdateProductsAsync(IEnumerable<Product> products)
-			=> await Task.Run(() => CreateOrUpdateProducts(products));
-
-		public void CreateOrUpdateProducts(IEnumerable<Product> products)
+		private readonly Lazy<ProductImageLogic> _imageLogic;
+		public ProductsLogic(MainDbContext context, Lazy<ProductImageLogic> imageLogic)
 		{
-			throw new NotImplementedException();
+			_imageLogic = imageLogic;
+			Context = context;
 		}
+
+		public async Task CreateOrUpdateProductsAsync(IEnumerable<ParsedProduct> products)
+			=> await Task.Run(() => CreateOrUpdateProducts(products));
 
 		public void CreateOrUpdateProducts(IEnumerable<ParsedProduct> products)
 		{
@@ -50,6 +51,12 @@ namespace ShopsDbEntities.Logic
 			}
 
 			Context.UpdateRange(toUpdateProducts);
+
+			var toCreateProducts = toCreateParsedProducts.ConvertParsedProducts();
+			Context.AddRange(toCreateProducts.Select(t => t.Product));
+			Context.SaveChanges();
+
+			_imageLogic.Value.LoadProductImagesToBlob(toCreateProducts);
 			Context.SaveChanges();
 		}
 

@@ -1,5 +1,6 @@
 ﻿using AngleSharp;
 using ShopsDbEntities;
+using ShopsDbEntities.Entities.ProductEntities;
 using ShopsParser.Parsers;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,14 @@ namespace ShopsParser
 			};
 		}
 
-		public ParallelQuery<Product> GetProductsByShop(Shop shop)
+		public ParallelQuery<ParsedProduct> GetProductsByShop(Shop shop)
 		{
 			var urlCollection = shop.Categories.SelectMany(c => c.SubCategories.Select(s => $"{shop.Url}/{c.Url}/{s.Url}"));
 
 			return urlCollection.AsParallel().SelectMany(u => GetProductsByUrl(shop.Name, u));
 		}
 
-		private ParallelQuery<Product> GetProductsByUrl(string shopName, string url)
+		private ParallelQuery<ParsedProduct> GetProductsByUrl(string shopName, string url)
 		{
 			var isSuccess = _shopParsers.TryGetValue(shopName, out var shopParser);
 			if (!isSuccess)
