@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
 using ShopsDbEntities.Logic;
@@ -13,13 +14,21 @@ namespace ProductsWebApi.Controllers
 	[Route("[controller]")]
 	public class ProductController : ControllerBase
 	{
+		private readonly ILogger<ProductController> _logger;
 		private readonly ProductsLogic _logic;
 		private IQueryable<Product> Products => _logic.Products;
-		public ProductController(ProductsLogic logic) => _logic = logic;
+		public ProductController(ILogger<ProductController> logger, ProductsLogic logic)
+		{
+			_logger = logger;
+			_logic = logic;
+		}
 
 		[HttpPost("createorupdate")]
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
-			=> await _logic.CreateOrUpdateProductsAsync(productData.Products);
+		{
+			_logger.LogInformation("Recieved product data");
+			await _logic.CreateOrUpdateProductsAsync(productData.Products);
+		}
 
 		[HttpGet]
 		public async Task<List<Product>> Get()
