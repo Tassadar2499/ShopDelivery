@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace ProductsWebApi.Models.Logic
 		private const string BROWSER_HEADER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 		private const string USER_AGENT = "user-agent";
 
+		private readonly ILogger<ProductImageLogic> _logger;
 		private readonly string _connection;
 		private readonly string _containerName;
 		public ProductImageLogic(IConfiguration configuration)
@@ -23,7 +25,25 @@ namespace ProductsWebApi.Models.Logic
 		}
 
 		public IEnumerable<Product> LoadProductImagesToBlob(IEnumerable<(Product Product, string SiteUrl)> productsUrlCollection)
-			=> productsUrlCollection.AsParallel().Select(LoadProductImageToBlob);
+			=> productsUrlCollection
+			.AsParallel()
+			.Select(LoadProductImageToBlobSafety)
+			.Where(p => p != null);
+
+		private Product LoadProductImageToBlobSafety((Product Product, string SiteUrl) productInfo)
+		{
+			Product product = null;
+			try
+			{
+				product = LoadProductImageToBlob(productInfo);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError($"Error in uploading image to blob - {ex}");
+			}
+
+			return product;
+		}
 
 		private Product LoadProductImageToBlob((Product Product, string SiteUrl) productInfo)
 		{
