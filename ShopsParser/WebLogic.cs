@@ -25,7 +25,7 @@ namespace ShopsParser
 			if (responseMessage.StatusCode != HttpStatusCode.OK)
 			{
 				var result = responseMessage.Content.ReadAsStringAsync().Result;
-				throw new WebException($"Error in send request {result}");
+				throw new WebException($"Error in send request; code - {responseMessage.StatusCode} result - {result}");
 			}
 		}
 

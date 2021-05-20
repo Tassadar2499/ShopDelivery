@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNet.OData;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNet.OData;
+using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
-using ShopsDbEntities.Logic;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ProductsWebApi.Controllers
 {
-	public class ProductsODataController : ODataController
+	[Inject]
+	public partial class ProductsODataController : ODataController
 	{
 		private readonly ProductsLogic _logic;
 		private IQueryable<Product> Products => _logic.Products;
-
-		public ProductsODataController(ProductsLogic logic) => _logic = logic;
 
 		[EnableQuery]
 		public List<Product> Get()

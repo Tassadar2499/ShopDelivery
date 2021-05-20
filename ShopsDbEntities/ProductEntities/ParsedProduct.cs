@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace ShopsDbEntities
+namespace ShopsDbEntities.Entities.ProductEntities
 {
 	[JsonObject]
-	public class Product
+	public class ParsedProduct
 	{
-		[JsonProperty]
-		public long Id { get; set; }
-
 		[JsonProperty]
 		public ShopType ShopType { get; set; }
 

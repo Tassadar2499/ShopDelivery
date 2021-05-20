@@ -1,0 +1,108 @@
+﻿@using Blazored.LocalStorage
+
+@using Microsoft.AspNetCore.SignalR.Client
+@using CouriersWebService.Data
+@using CouriersWebService.Services
+@using Microsoft.Extensions.Logging
+@using Blazored.LocalStorage
+
+@inject ILocalStorageService localStorage
+@inject NavigationManager navigationManager
+@inject CouriersAuthLogic authLogic
+@inject ILogger<RightPanel> logger
+
+<div>
+	<div class="top-row pl-4 navbar navbar-dark">
+		<h1 class="navbar-brand">Orders</h1>
+	</div>
+	@if (IsLoggedIn)
+	{
+		<h6 style="color:white">List</h6>
+		<ul class="nav flex-column" id="messagesList">
+			@foreach (var message in Messages)
+			{
+				<li style="color:white">@message</li>
+			}
+		</ul>
+	}
+</div>
+
+@code {
+	private bool IsLoggedIn { get; set; }
+	private HubConnection HubConnection { get; set; }
+	private List<string> Messages { get; set; }
+	public bool IsConnected => HubConnection.State == HubConnectionState.Connected;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender)
+			return;
+
+		logger.LogInformation("Right panel render");
+
+		await InitializeHubClientAsync();
+
+		StateHasChanged();
+	}
+
+	private async Task InitializeHubClientAsync()
+	{
+		Messages = new List<string>();
+
+		IsLoggedIn = await IsContainsLoginAsync();
+		if (!IsLoggedIn)
+			return;
+
+		HubConnection = new HubConnectionBuilder()
+			.WithUrl(navigationManager.ToAbsoluteUri("/couriershub"))
+			.Build();
+
+		HubConnection.On<string>("RecieveOrderInfo", OnStartConnection);
+		HubConnection.Closed += OnCloseConnectionAsync;
+
+		await HubConnection.StartAsync();
+
+		var updateCourierData = await GetUpdateCourierDataAsync();
+		await authLogic.UpdateAsync(updateCourierData);
+	}
+
+	private async Task<UpdateCourierData> GetUpdateCourierDataAsync()
+	{
+		var random = new Random();
+		var login = await GetLoginAsync();
+		return new UpdateCourierData()
+		{
+			Login = login,
+			SignalRConnectionId = HubConnection.ConnectionId,
+			Longitude = random.Next(1000) + random.NextDouble(),
+			Latitude = random.Next(1000) + random.NextDouble()
+		};
+	}
+
+	private void OnStartConnection(string message)
+	{
+		Messages.Add(message);
+		StateHasChanged();
+	}
+
+	private async Task OnCloseConnectionAsync(Exception ex)
+	{
+		logger.LogInformation("Connection closed");
+		if (ex != null)
+			logger.LogError($"Error - {ex}");
+
+		Messages.Clear();
+		var login = await GetLoginAsync();
+		await authLogic.RemoveAsync(login);
+	}
+
+	private async Task<bool> IsContainsLoginAsync()
+	{
+		var login = await GetLoginAsync();
+
+		return !string.IsNullOrEmpty(login);
+	}
+
+	private async Task<string> GetLoginAsync()
+		=> await localStorage.GetItemAsStringAsync("login");
+}

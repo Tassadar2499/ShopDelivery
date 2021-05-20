@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace ShopsDbEntities.Utils
 {
@@ -22,8 +20,5 @@ namespace ShopsDbEntities.Utils
 
 			return (first, second);
 		}
-
-		public static IQueryable<T> WhereByExpression<T>(this IQueryable<T> collection, Expression<Func<T, bool>> predicate)
-			=> collection.Where(predicate);
 	}
 }

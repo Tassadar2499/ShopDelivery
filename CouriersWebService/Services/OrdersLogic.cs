@@ -1,24 +1,20 @@
-﻿using ShopsDbEntities;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.Extensions.Logging;
+using ShopsDbEntities;
 using ShopsDbEntities.Entities;
-using ShopsDbEntities.Entities.ProductEntities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class OrdersLogic
+	[Inject]
+	public partial class OrdersLogic
 	{
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
 		private readonly CouriersNotifyService _couriersNotifyService;
-
-		public OrdersLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context, CouriersNotifyService couriersNotifyService)
-		{
-			_couriersCacheLogic = couriersCacheLogic;
-			_context = context;
-			_couriersNotifyService = couriersNotifyService;
-		}
+		private readonly ILogger<OrdersLogic> _logger;
 
 		public async Task HandleOrderAsync(Order order)
 		{
@@ -27,9 +23,12 @@ namespace CouriersWebService.Services
 
 			var coords = (address.Longitude, address.Latitude);
 			var correctCourier = await GetCorrectCourierAsync(coords);
-			//TODO: fix it
+
 			if (correctCourier == null)
+			{
+				_logger.LogError("Cannot find any correct courier");
 				return;
+			}
 
 			correctCourier.Status = CourierStatus.Work;
 			await _couriersCacheLogic.UpdateAsync(correctCourier);
@@ -48,7 +47,10 @@ namespace CouriersWebService.Services
 				.ToArray();
 
 			if (activeCouriers.Length == 0)
+			{
+				_logger.LogInformation("There is no any active couriers");
 				return null;
+			}
 
 			var minValue = activeCouriers.Min(c => c.Value);
 

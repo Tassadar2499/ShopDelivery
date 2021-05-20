@@ -1,11 +1,11 @@
 ﻿using AngleSharp.Dom;
-using ShopsDbEntities;
+using ShopsDbEntities.Entities.ProductEntities;
 using System.Linq;
 
 namespace ShopsParser
 {
 	public interface IShopParser
 	{
-		public ParallelQuery<Product> GetProducts(IDocument document);
+		public ParallelQuery<ParsedProduct> GetProducts(IDocument document);
 	}
 }

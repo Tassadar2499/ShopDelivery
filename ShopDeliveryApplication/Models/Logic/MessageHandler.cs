@@ -1,7 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities;
 using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
@@ -10,7 +10,7 @@ namespace ShopDeliveryApplication.Models.Logic
 	{
 		private const string QUEUE_NAME = "created_orders";
 
-		private readonly string _connectionString = "";
+		private readonly string _connectionString;
 
 		public MessageHandler(IConfiguration configuration)
 		{

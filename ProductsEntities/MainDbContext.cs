@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShopsDbEntities.Entities;
 using ShopsDbEntities.Entities.Geography;
-using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.Entities.UsersInfo;
 using ShopsDbEntities.ShopsEntities;
 using System.Threading.Tasks;
