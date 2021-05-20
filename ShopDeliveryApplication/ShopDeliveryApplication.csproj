@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductsEntities\ShopsDbLogic.csproj" />
+    <ProjectReference Include="..\ShopsDbLogic\ShopsDbLogic.csproj" />
   </ItemGroup>
 
 </Project>

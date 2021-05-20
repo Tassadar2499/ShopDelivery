@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsParser", "ShopsParser\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductsWebApi", "ProductsWebApi\ProductsWebApi.csproj", "{7FCC61BD-ADE7-4184-B5D8-CF1394077E78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbLogic", "ProductsEntities\ShopsDbLogic.csproj", "{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopsDbLogic", "ShopsDbLogic\ShopsDbLogic.csproj", "{A7974540-DBD9-4BDF-BD8A-BEB1163A4513}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopDeliveryApplication", "ShopDeliveryApplication\ShopDeliveryApplication.csproj", "{DD33634A-D4FC-458C-A68A-7753E508705D}"
 EndProject
