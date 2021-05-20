@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace ProductsWebApi.Models.Logic
 {
-	public static class ProductsConverter
+	public class ProductsConverter
 	{
-		private static readonly Mapper _mapper;
-		static ProductsConverter()
+		private readonly Mapper _mapper;
+		public ProductsConverter()
 		{
 			var mapperConfig = new MapperConfiguration(ConfigureMapping);
 			_mapper = new Mapper(mapperConfig);
 		}
 
-		public static IEnumerable<(Product Product, string SiteUrl)> ConvertParsedProducts(this IEnumerable<ParsedProduct> parsedProducts)
+		public IEnumerable<(Product Product, string SiteUrl)> ConvertParsedProducts(IEnumerable<ParsedProduct> parsedProducts)
 			=> parsedProducts.Select(ConvertParsedProduct);
 
-		private static (Product Product, string SiteUrl) ConvertParsedProduct(ParsedProduct parsedProduct)
+		private (Product Product, string SiteUrl) ConvertParsedProduct(ParsedProduct parsedProduct)
 		{
 			var product = new Product();
 			_mapper.Map(parsedProduct, product);

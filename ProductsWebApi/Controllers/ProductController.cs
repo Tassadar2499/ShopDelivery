@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductsWebApi.Models.Logic;
@@ -12,16 +13,12 @@ namespace ProductsWebApi.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class ProductController : ControllerBase
+	[Inject]
+	public partial class ProductController : ControllerBase
 	{
 		private readonly ILogger<ProductController> _logger;
 		private readonly ProductsLogic _logic;
 		private IQueryable<Product> Products => _logic.Products;
-		public ProductController(ILogger<ProductController> logger, ProductsLogic logic)
-		{
-			_logger = logger;
-			_logic = logic;
-		}
 
 		[HttpPost("createorupdate")]
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)

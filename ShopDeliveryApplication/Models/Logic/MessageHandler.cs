@@ -10,7 +10,7 @@ namespace ShopDeliveryApplication.Models.Logic
 	{
 		private const string QUEUE_NAME = "created_orders";
 
-		private readonly string _connectionString = "";
+		private readonly string _connectionString;
 
 		public MessageHandler(IConfiguration configuration)
 		{

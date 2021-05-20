@@ -1,8 +1,10 @@
-﻿using ShopsDbEntities;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using ShopsDbEntities;
 using ShopsDbEntities.Entities.Comparers;
 using ShopsDbEntities.Entities.ProductEntities;
 using ShopsDbEntities.Logic;
 using ShopsDbEntities.Utils;
+using ShopsDbLogic.Logic;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -11,16 +13,20 @@ using System.Threading.Tasks;
 
 namespace ProductsWebApi.Models.Logic
 {
-	public class ProductsLogic
+	public class ProductsLogic : ProductsLogicBase
 	{
-		public MainDbContext Context { get; }
-		public IQueryable<Product> Products => Context.Products;
-
 		private readonly ProductImageLogic _imageLogic;
-		public ProductsLogic(MainDbContext context, ProductImageLogic imageLogic)
+		private readonly ProductsConverter _productsConverter;
+
+		private ProductsLogic(MainDbContext context) : base(context)
+		{
+		}
+
+		public ProductsLogic(MainDbContext context, ProductImageLogic imageLogic, ProductsConverter productsConverter)
+			: this(context)
 		{
 			_imageLogic = imageLogic;
-			Context = context;
+			_productsConverter = productsConverter;
 		}
 
 		public async Task CreateOrUpdateProductsAsync(IEnumerable<ParsedProduct> products)
@@ -41,23 +47,13 @@ namespace ProductsWebApi.Models.Logic
 			UpdateProducts(toUpdateProducts, toUpdateParsedProducts.ToImmutableHashSet());
 			Context.UpdateRange(toUpdateProducts);
 
-			var toCreateProductsInfo = toCreateParsedProducts.ConvertParsedProducts().ToArray();
+			var toCreateProductsInfo = _productsConverter.ConvertParsedProducts(toCreateParsedProducts).ToArray();
 			Context.AddRange(toCreateProductsInfo.Select(t => t.Product));
 			Context.SaveChanges();
 
 			var imagesDict = ProductsInfoToDict(toCreateProductsInfo);
 			UploadImagesToProducts(imagesDict);
 		}
-
-		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
-			=> Products.WhereByExpression(p => idSet.Contains(p.Id));
-
-		public Product[] GetCatalogProducts(byte shopId, byte categoryId, byte subCategoryId)
-			=> Products
-				.Where(p => (byte)p.ShopType == shopId)
-				.Where(p => (byte)p.Category == categoryId)
-				.Where(p => (byte)p.SubCategory == subCategoryId)
-				.ToArray();
 
 		private void UploadImagesToProducts(Dictionary<long, string> images)
 		{
@@ -76,10 +72,10 @@ namespace ProductsWebApi.Models.Logic
 			var shopTypesSet = products.Select(p => p.ShopType).ToImmutableHashSet();
 
 			return Products
-				.WhereByExpression(p => namesSet.Contains(p.Name))
-				.WhereByExpression(p => subCategoriesSet.Contains(p.SubCategory))
-				.WhereByExpression(p => categoriesSet.Contains(p.Category))
-				.WhereByExpression(p => shopTypesSet.Contains(p.ShopType))
+				.Where(p => namesSet.Contains(p.Name))
+				.Where(p => subCategoriesSet.Contains(p.SubCategory))
+				.Where(p => categoriesSet.Contains(p.Category))
+				.Where(p => shopTypesSet.Contains(p.ShopType))
 				.ToImmutableHashSet();
 		}
 

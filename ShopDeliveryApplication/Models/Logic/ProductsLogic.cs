@@ -1,5 +1,6 @@
 ﻿using ShopsDbEntities;
 using ShopsDbEntities.Utils;
+using ShopsDbLogic.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
 {
-	public class ProductsLogic
+	public class ProductsLogic : ProductsLogicBase
 	{
-		public MainDbContext Context { get; }
-		public IQueryable<Product> Products => Context.Products;
-		public ProductsLogic(MainDbContext context) => Context = context;
-
-		public IQueryable<Product> GetProductsByIdSet(HashSet<long> idSet)
-			=> Products.WhereByExpression(p => idSet.Contains(p.Id));
+		public ProductsLogic(MainDbContext context) : base(context)
+		{
+		}
 
 		public Product[] GetCatalogProducts(byte shopId, byte categoryId, byte subCategoryId)
 			=> Products

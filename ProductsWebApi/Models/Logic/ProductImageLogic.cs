@@ -12,16 +12,20 @@ namespace ProductsWebApi.Models.Logic
 {
 	public class ProductImageLogic
 	{
+		private const string BLOB_CONNECTION = "BlobConnection";
+		private const string CONNECTION_OBJ_NAMES = "ConnectionObjNames";
+		private const string BLOB_CONTAINER = "BlobContainer";
 		private const string BROWSER_HEADER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 		private const string USER_AGENT = "user-agent";
 
 		private readonly ILogger<ProductImageLogic> _logger;
 		private readonly string _connection;
 		private readonly string _containerName;
-		public ProductImageLogic(IConfiguration configuration)
+		public ProductImageLogic(ILogger<ProductImageLogic> logger, IConfiguration configuration)
 		{
-			_connection = configuration.GetConnectionString("BlobConnection");
-			_containerName = configuration.GetSection("ConnectionObjNames")["BlobContainer"];
+			_logger = logger;
+			_connection = configuration.GetConnectionString(BLOB_CONNECTION);
+			_containerName = configuration.GetSection(CONNECTION_OBJ_NAMES)[BLOB_CONTAINER];
 		}
 
 		public IEnumerable<Product> LoadProductImagesToBlob(IEnumerable<(Product Product, string SiteUrl)> productsUrlCollection)
@@ -36,6 +40,10 @@ namespace ProductsWebApi.Models.Logic
 			try
 			{
 				product = LoadProductImageToBlob(productInfo);
+			}
+			catch (WebException ex)
+			{
+				_logger.LogError($"Web exception in uploading image to blob - {ex}");
 			}
 			catch (Exception ex)
 			{

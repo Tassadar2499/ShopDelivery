@@ -29,6 +29,7 @@ namespace ProductsWebApi
 		{
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
+			services.AddSingleton<ProductsConverter>();
 			services.AddScoped<ProductImageLogic>();
 			services.AddScoped<ProductsLogic>();
 
