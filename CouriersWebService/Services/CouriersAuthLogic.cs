@@ -1,6 +1,8 @@
 ﻿using CouriersWebService.Data;
+using HarabaSourceGenerators.Common.Attributes;
 using Isopoh.Cryptography.Argon2;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
 using System;
@@ -10,20 +12,16 @@ using System.Threading.Tasks;
 
 namespace CouriersWebService.Services
 {
-	public class CouriersAuthLogic
+	[Inject]
+	public partial class CouriersAuthLogic
 	{
 		public const string COURIERS_KEY = "couriers_id";
 
 		private readonly CouriersCacheLogic _couriersCacheLogic;
 		private readonly MainDbContext _context;
+		private readonly ILogger<CouriersAuthLogic> _logger;
 
 		private IQueryable<Courier> Couriers => _context.Couriers;
-
-		public CouriersAuthLogic(CouriersCacheLogic couriersCacheLogic, MainDbContext context)
-		{
-			_couriersCacheLogic = couriersCacheLogic;
-			_context = context;
-		}
 
 		public async Task UpdateAsync([DisallowNull] UpdateCourierData courierData)
 		{
@@ -32,7 +30,10 @@ namespace CouriersWebService.Services
 				?? await _context.Couriers.FirstOrDefaultAsync(c => c.Login == login);
 
 			if (courier == null)
+			{
+				_logger.LogError($"Cannot find courier by login = {login}");
 				return;
+			}
 
 			courier.Status = CourierStatus.Active;
 			courier.Longitude = courierData.Longitude;
@@ -40,14 +41,18 @@ namespace CouriersWebService.Services
 			courier.SignalRConnectionId = courierData.SignalRConnectionId;
 
 			await _couriersCacheLogic.UpdateAsync(courier);
-			Console.WriteLine("Courier updated");
+			_logger.LogInformation("Courier updated");
 		}
 
 		public async Task<bool> LoginAsync([DisallowNull] AuthData loginData)
 		{
-			var courier = await Couriers.FirstOrDefaultAsync(l => loginData.Login == l.Login);
+			var login = loginData.Login;
+			var courier = await Couriers.FirstOrDefaultAsync(l => l.Login == login);
 			if (courier == null)
+			{
+				_logger.LogError($"Cannot find courier by login = {login}");
 				return false;
+			}
 
 			return Argon2.Verify(courier.Password, loginData.Password);
 		}
@@ -65,6 +70,20 @@ namespace CouriersWebService.Services
 			};
 
 			await _context.CreateAndSaveAsync(courier);
+			_logger.LogInformation("Courier registered");
+		}
+
+		public async Task RemoveAsync(string login)
+		{
+			var courier = await _couriersCacheLogic.GetCourierByLoginAsync(login);
+			if (courier == null)
+			{
+				_logger.LogError($"Cannot find courier by login = {login}");
+				return;
+			}
+
+			await _couriersCacheLogic.RemoveAsync(courier);
+			_logger.LogInformation("Courier removed");
 		}
 	}
 }

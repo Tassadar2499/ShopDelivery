@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ShopsDbEntities.Entities.ProductEntities;
 
 namespace ShopsDbEntities
 {
@@ -6,6 +7,6 @@ namespace ShopsDbEntities
 	public class ProductData
 	{
 		[JsonProperty]
-		public Product[] Products { get; set; }
+		public ParsedProduct[] Products { get; set; }
 	}
 }

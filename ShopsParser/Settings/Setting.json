@@ -1,5 +1,5 @@
 {
-	"WebApiUrl": "https://productswebapi20201116224729.azurewebsites.net",
+	"WebApiUrl": "https://localhost:5001",
 	"Shops": [
 		{
 			"Name": "Okey",

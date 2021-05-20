@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
-using ShopsDbEntities.Logic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,21 +12,19 @@ namespace ProductsWebApi.Controllers
 {
 	[ApiController]
 	[Route("[controller]")]
-	public class ProductController : ControllerBase
+	[Inject]
+	public partial class ProductController : ControllerBase
 	{
+		private readonly ILogger<ProductController> _logger;
 		private readonly ProductsLogic _logic;
-		private MainDbContext Context => _logic.Context;
 		private IQueryable<Product> Products => _logic.Products;
-
-		public ProductController(ProductsLogic logic) => _logic = logic;
 
 		[HttpPost("createorupdate")]
 		public async Task CreateOrUpdateAsync([FromBody] ProductData productData)
-			=> await _logic.CreateOrUpdateProductsAsync(productData.Products);
-
-		[HttpPut("create")]
-		public async Task CreateAsync([FromBody] Product product)
-			=> await Context.CreateAndSaveAsync(product);
+		{
+			_logger.LogInformation("Recieved product data");
+			await _logic.CreateOrUpdateProductsAsync(productData.Products);
+		}
 
 		[HttpGet]
 		public async Task<List<Product>> Get()

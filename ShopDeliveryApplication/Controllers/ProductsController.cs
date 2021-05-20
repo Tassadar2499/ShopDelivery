@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShopsDbEntities.Logic;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Mvc;
+using ShopDeliveryApplication.Models.Logic;
 
 namespace ShopDeliveryApplication.Controllers
 {
-	public class ProductsController : Controller
+	[Inject]
+	public partial class ProductsController : Controller
 	{
 		private readonly ProductsLogic _logic;
-
-		public ProductsController(ProductsLogic logic) => _logic = logic;
 
 		public IActionResult Index(byte shopId, byte categoryId, byte subCategoryId)
 		{

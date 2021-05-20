@@ -1,26 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Http;
 using ShopDeliveryApplication.Models.Entities;
-using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities;
 using ShopsDbEntities.Logic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
 {
-	public class BucketLogic
+	[Inject]
+	public partial class BucketLogic
 	{
 		public const string BUCKET = "bucket";
 
 		private readonly ProductsLogic _productsLogic;
 		private readonly OrdersLogic _ordersLogic;
 		private readonly MessageHandler _messageHandler;
-
-		public BucketLogic(ProductsLogic productLogic, OrdersLogic ordersLogic, MessageHandler messageHandler)
-		{
-			_productsLogic = productLogic;
-			_ordersLogic = ordersLogic;
-			_messageHandler = messageHandler;
-		}
 
 		public async Task SendOrderAsync(string idArrStr, string userId)
 		{
@@ -47,7 +43,7 @@ namespace ShopDeliveryApplication.Models.Logic
 
 			return isSuccess
 				? GetBucketProductsByIdArr(productsIdArr)
-				: new BucketProduct[] { };
+				: Array.Empty<BucketProduct>();
 		}
 
 		private BucketProduct[] GetBucketProductsByIdArr(long[] productsIdArr)

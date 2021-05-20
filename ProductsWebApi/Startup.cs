@@ -9,8 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 using OData.Swagger.Services;
+using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
-using ShopsDbEntities.Logic;
 using System;
 
 namespace ProductsWebApi
@@ -28,6 +28,8 @@ namespace ProductsWebApi
 		{
 			var connection = Configuration.GetConnectionString("DefaultConnection");
 			services.AddDbContext<MainDbContext>(options => options.UseSqlServer(connection));
+			services.AddSingleton<ProductsConverter>();
+			services.AddScoped<ProductImageLogic>();
 			services.AddScoped<ProductsLogic>();
 
 			services.AddOData();

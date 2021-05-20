@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using ShopsDbEntities;
+using ShopsDbEntities.Entities.ProductEntities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -26,10 +27,10 @@ namespace ShopsParser.Parsers
 			};
 		}
 
-		public ParallelQuery<Product> GetProducts(IDocument document)
+		public ParallelQuery<ParsedProduct> GetProducts(IDocument document)
 			=> document.GetElementsByClassName("product").AsParallel().Select(GetProduct);
 
-		private Product GetProduct(IElement element)
+		private ParsedProduct GetProduct(IElement element)
 		{
 			var url = element.BaseUri;
 
@@ -53,7 +54,7 @@ namespace ShopsParser.Parsers
 
 			Task.WaitAll(productNameTask, priceTask, weightTask, imageUrlTask);
 
-			return new Product()
+			return new()
 			{
 				ShopType = ShopType.Okey,
 				Category = productCategoryTask.Result,

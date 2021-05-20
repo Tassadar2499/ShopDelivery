@@ -1,12 +1,14 @@
 ﻿@page "/login"
 
 @using CouriersWebService.Data
-@using System.Net.Http.Json;
-@using CouriersWebService.Services;
+@using CouriersWebService.Services
+@using Blazored.LocalStorage
 
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject CouriersAuthLogic couriersAuthLogic
+@inject IJSRuntime JsRuntime
+@inject ILocalStorageService localStorage
 
 <h3>Register</h3>
 
@@ -32,6 +34,13 @@
 	{
 		var isSuccess = await couriersAuthLogic.LoginAsync(AuthData);
 		if (isSuccess)
-			navigationManager.NavigateTo($"{navigationManager.BaseUri}/courierinfo?login={AuthData.Login}");
+		{
+			await localStorage.SetItemAsync("login", AuthData.Login);
+			navigationManager.NavigateTo(navigationManager.BaseUri, true);
+		}
+		else
+		{
+			await JsRuntime.InvokeVoidAsync("alert", "Authentithication failed");
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShopDeliveryApplication.Models;
@@ -8,22 +9,19 @@ using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Controllers
 {
-	public class BucketController : Controller
+	[Inject]
+	public partial class BucketController : Controller
 	{
 		public const string BUCKET = "bucket";
 
-		private ISession Session => HttpContext.Session;
-		private BucketLogic BucketLogic { get; }
-		private UserManager<User> UserManger { get; }
+		private readonly BucketLogic _bucketLogic;
+		private readonly UserManager<User> _userManger;
 
-		public BucketController(BucketLogic logic)
-		{
-			BucketLogic = logic;
-		}
+		private ISession Session => HttpContext.Session;
 
 		public IActionResult Index()
 		{
-			var products = BucketLogic.GetBucketProductsBySession(HttpContext.Session);
+			var products = _bucketLogic.GetBucketProductsBySession(HttpContext.Session);
 
 			return View(products);
 		}
@@ -45,7 +43,7 @@ namespace ShopDeliveryApplication.Controllers
 			if (isSuccess)
 			{
 				//var userId = UserManger.GetUserId(User);
-				await BucketLogic.SendOrderAsync(productsIdArrStr, "-1");
+				await _bucketLogic.SendOrderAsync(productsIdArrStr, "-1");
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HarabaSourceGenerators.Common.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ShopDeliveryApplication.Models.Entities;
@@ -9,16 +10,11 @@ using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Controllers
 {
-	public class AccountController : Controller
+	[Inject]
+	public partial class AccountController : Controller
 	{
-		private UserManager<User> UserManager { get; }
-		private SignInManager<User> SignInManager { get; }
-
-		public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
-		{
-			UserManager = userManager;
-			SignInManager = signInManager;
-		}
+		private readonly UserManager<User> _userManager;
+		private readonly SignInManager<User> _signInManager;
 
 		#region Register
 
@@ -33,7 +29,7 @@ namespace ShopDeliveryApplication.Controllers
 
 			var email = registerData.Email;
 
-			var userExist = await UserManager.FindByEmailAsync(email);
+			var userExist = await _userManager.FindByEmailAsync(email);
 			if (userExist != null)
 			{
 				ModelState.AddModelError(string.Empty, "Данный пользователь уже зарегистрирован");
@@ -42,15 +38,14 @@ namespace ShopDeliveryApplication.Controllers
 
 			var user = new User { Email = registerData.Email, UserName = registerData.Email };
 
-			var result = await UserManager.CreateAsync(user, registerData.Password);
+			var result = await _userManager.CreateAsync(user, registerData.Password);
 			if (result.Succeeded)
 			{
-				var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+				var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 				var callbackUrl = CreateCallbackUrl(user, code, "ConfirmEmail");
 				var message = $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>Подтвердить</a>";
 
-				var emailService = new EmailService();
-				await emailService.SendEmailAsync(registerData.Email, "Confirm your account", message);
+				await EmailService.SendEmailAsync(registerData.Email, "Confirm your account", message);
 
 				return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
 			}
@@ -76,15 +71,14 @@ namespace ShopDeliveryApplication.Controllers
 			if (!ModelState.IsValid)
 				return View(loginData);
 
-			var user = await UserManager.FindByNameAsync(loginData.Email);
-			if (user != null && !await UserManager.IsEmailConfirmedAsync(user))
+			var user = await _userManager.FindByNameAsync(loginData.Email);
+			if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
 			{
 				ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
-
 				return View(loginData);
 			}
 
-			var result = await SignInManager.PasswordSignInAsync(loginData.Email, loginData.Password, loginData.RememberMe, false);
+			var result = await _signInManager.PasswordSignInAsync(loginData.Email, loginData.Password, loginData.RememberMe, false);
 
 			if (result.Succeeded)
 				return RedirectToMain();
@@ -98,7 +92,7 @@ namespace ShopDeliveryApplication.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Logout()
 		{
-			await SignInManager.SignOutAsync();
+			await _signInManager.SignOutAsync();
 
 			return RedirectToMain();
 		}
@@ -114,11 +108,11 @@ namespace ShopDeliveryApplication.Controllers
 			if (userId == null || code == null)
 				return View("Error");
 
-			var user = await UserManager.FindByIdAsync(userId);
+			var user = await _userManager.FindByIdAsync(userId);
 			if (user == null)
 				return View("Error");
 
-			var result = await UserManager.ConfirmEmailAsync(user, code);
+			var result = await _userManager.ConfirmEmailAsync(user, code);
 
 			return result.Succeeded
 				? RedirectToMain()
@@ -141,16 +135,15 @@ namespace ShopDeliveryApplication.Controllers
 			if (!ModelState.IsValid)
 				return View(forgotPasswordData);
 
-			var user = await UserManager.FindByEmailAsync(forgotPasswordData.Email);
-			if (user == null || !await UserManager.IsEmailConfirmedAsync(user))
+			var user = await _userManager.FindByEmailAsync(forgotPasswordData.Email);
+			if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
 				return View("ForgotPasswordConfirmation");
 
-			var code = await UserManager.GeneratePasswordResetTokenAsync(user);
+			var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 			var callbackUrl = CreateCallbackUrl(user, code, "ResetPassword");
 			var message = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>Сбросить пароль</a>";
 
-			var emailService = new EmailService();
-			await emailService.SendEmailAsync(forgotPasswordData.Email, "Reset Password", message);
+			await EmailService.SendEmailAsync(forgotPasswordData.Email, "Reset Password", message);
 
 			return View("ForgotPasswordConfirmation");
 		}
@@ -172,11 +165,11 @@ namespace ShopDeliveryApplication.Controllers
 			if (!ModelState.IsValid)
 				return View(resetPasswordData);
 
-			var user = await UserManager.FindByEmailAsync(resetPasswordData.Email);
+			var user = await _userManager.FindByEmailAsync(resetPasswordData.Email);
 			if (user == null)
 				return View("ResetPasswordConfirmation");
 
-			var result = await UserManager.ResetPasswordAsync(user, resetPasswordData.Code, resetPasswordData.Password);
+			var result = await _userManager.ResetPasswordAsync(user, resetPasswordData.Code, resetPasswordData.Password);
 			if (result.Succeeded)
 				return View("ResetPasswordConfirmation");
 
