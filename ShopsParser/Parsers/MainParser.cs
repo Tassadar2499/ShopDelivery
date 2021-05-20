@@ -1,5 +1,4 @@
 ﻿using AngleSharp;
-using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
 using ShopsParser.Parsers;
 using System;

@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProductsWebApi.Models.Logic
 {
 	public class ProductsConverter
 	{
 		private readonly Mapper _mapper;
+
 		public ProductsConverter()
 		{
 			var mapperConfig = new MapperConfiguration(ConfigureMapping);

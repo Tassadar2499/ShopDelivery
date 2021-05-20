@@ -1,10 +1,6 @@
 ﻿using ShopsDbEntities;
-using ShopsDbEntities.Utils;
 using ShopsDbLogic.Logic;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
 {

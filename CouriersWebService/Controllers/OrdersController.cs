@@ -2,7 +2,7 @@
 using HarabaSourceGenerators.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities;
 using System.Threading.Tasks;
 
 namespace CouriersWebService.Controllers

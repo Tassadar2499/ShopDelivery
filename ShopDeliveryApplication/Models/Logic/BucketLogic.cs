@@ -1,7 +1,7 @@
 ﻿using HarabaSourceGenerators.Common.Attributes;
 using Microsoft.AspNetCore.Http;
 using ShopDeliveryApplication.Models.Entities;
-using ShopsDbEntities.Entities.ProductEntities;
+using ShopsDbEntities;
 using ShopsDbEntities.Logic;
 using System;
 using System.Linq;

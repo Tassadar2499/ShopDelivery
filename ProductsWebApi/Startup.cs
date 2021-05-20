@@ -11,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using OData.Swagger.Services;
 using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
-using ShopsDbEntities.Logic;
 using System;
 
 namespace ProductsWebApi

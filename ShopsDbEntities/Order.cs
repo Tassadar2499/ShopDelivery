@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ShopsDbEntities.Entities.ProductEntities
+namespace ShopsDbEntities
 {
 	[JsonObject]
 	public class Order

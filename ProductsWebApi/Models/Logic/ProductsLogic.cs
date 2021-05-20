@@ -1,8 +1,6 @@
-﻿using HarabaSourceGenerators.Common.Attributes;
-using ShopsDbEntities;
-using ShopsDbEntities.Entities.Comparers;
+﻿using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
-using ShopsDbEntities.Logic;
+using ShopsDbEntities.Logic.Comparers;
 using ShopsDbEntities.Utils;
 using ShopsDbLogic.Logic;
 using System;

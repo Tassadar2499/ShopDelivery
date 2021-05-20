@@ -2,7 +2,6 @@
 using Microsoft.AspNet.OData;
 using ProductsWebApi.Models.Logic;
 using ShopsDbEntities;
-using ShopsDbEntities.Logic;
 using System.Collections.Generic;
 using System.Linq;
 

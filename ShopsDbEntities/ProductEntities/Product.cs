@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-
-namespace ShopsDbEntities
+﻿namespace ShopsDbEntities
 {
 	public class Product
 	{

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace ProductsWebApi.Models.Logic
 {
@@ -21,6 +20,7 @@ namespace ProductsWebApi.Models.Logic
 		private readonly ILogger<ProductImageLogic> _logger;
 		private readonly string _connection;
 		private readonly string _containerName;
+
 		public ProductImageLogic(ILogger<ProductImageLogic> logger, IConfiguration configuration)
 		{
 			_logger = logger;

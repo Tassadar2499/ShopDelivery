@@ -1,5 +1,4 @@
 ﻿using AngleSharp.Dom;
-using ShopsDbEntities;
 using ShopsDbEntities.Entities.ProductEntities;
 using System.Linq;
 

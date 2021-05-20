@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
-using ShopsDbEntities.Entities.ProductEntities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,5 +1,4 @@
-﻿using ShopsDbEntities.Entities.ProductEntities;
-using System.Linq;
+﻿using System.Linq;
 
 namespace ShopsDbEntities.Logic
 {

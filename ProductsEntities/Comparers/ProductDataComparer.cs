@@ -1,9 +1,6 @@
 ﻿using ShopsDbEntities.Entities.ProductEntities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ShopsDbEntities.Entities.Comparers
+namespace ShopsDbEntities.Logic.Comparers
 {
 	public static class ProductDataComparer
 	{
