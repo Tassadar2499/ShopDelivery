@@ -18,7 +18,7 @@
 
 ### Технологии:
 
-1. БД - MS SQL Server - в облаке Azure
+1. Azure SQL
 2. Azure Redis Cache
 3. Azure Blob Storage
 4. Azure Functions
