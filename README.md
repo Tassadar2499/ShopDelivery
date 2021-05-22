@@ -26,17 +26,7 @@
 6. Azure Web Apps
 7. Azure Container Registry
 
-## Сторонние библиотеки:
-1. Newtonsoft.Json
-2. AngleSharp
-3. Asp.NetCore.Identity
-4. EntityFramework Core
-5. AutoMapper
-6. HarabaSource Generators
-7. MailKit
-8. Cryptography Argon
-
-## Используемые технологии:
+## Прочие технологии:
 1. .net 5
 2. Docker
 3. ASP.NET Core, ASP.NET Core Web Api, ASP.NET Core Blazor Server
@@ -44,6 +34,13 @@
 5. SignalR
 6. OData
 7. Swagger
+8. Newtonsoft.Json
+9. AngleSharp
+10. Asp.NetCore Identity
+11. EntityFramework
+12. AutoMapper
+13. HarabaSource Generators
+14. MailKit
 
 ### Примечание:
 На данный момент проект в стадии разработки, поэтому может присутствовать большое количество багов.
