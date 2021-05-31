@@ -16,6 +16,7 @@ namespace ShopsDbEntities
 		public DbSet<ProductDbCategory> ProductCategories { get; set; }
 		public DbSet<ProductDbSubCategory> ProductSubCategories { get; set; }
 		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderProduct> OrderProducts { get; set; }
 		public DbSet<UsersAddress> UsersAddresses { get; set; }
 		public DbSet<Address> Addresses { get; set; }
 		public DbSet<City> Cities { get; set; }

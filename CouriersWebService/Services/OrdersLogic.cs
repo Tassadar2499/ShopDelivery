@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using ShopsDbEntities;
 using ShopsDbEntities.Entities;
+using ShopsDbEntities.OrderData;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,8 +17,11 @@ namespace CouriersWebService.Services
 		private readonly CouriersNotifyService _couriersNotifyService;
 		private readonly ILogger<OrdersLogic> _logger;
 
-		public async Task HandleOrderAsync(Order order)
+		public async Task HandleOrderAsync(OrderInfo orderData)
 		{
+			//TODO: Refactor
+
+			var order = await _context.Orders.FindAsync(orderData.OrderId);
 			var usersAddress = await _context.UsersAddresses.FindAsync(order.UserAddressId);
 			var address = await _context.Addresses.FindAsync(usersAddress.AddressId);
 

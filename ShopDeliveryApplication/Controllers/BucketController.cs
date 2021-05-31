@@ -39,11 +39,11 @@ namespace ShopDeliveryApplication.Controllers
 		{
 			//TODO: SendUserInfo
 			//UserManger.GetUserId(User);
-			var isSuccess = Session.TryGetString(BUCKET, out var productsIdArrStr);
+			var isSuccess = Session.TryGetIdArrByKey(BUCKET, out var productsIdArr);
 			if (isSuccess)
 			{
 				//var userId = UserManger.GetUserId(User);
-				await _bucketLogic.SendOrderAsync(productsIdArrStr, "-1");
+				await _bucketLogic.SendOrderAsync(productsIdArr, "-1");
 			}
 		}
 	}

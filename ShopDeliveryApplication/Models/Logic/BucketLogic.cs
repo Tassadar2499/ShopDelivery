@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using ShopDeliveryApplication.Models.Entities;
 using ShopsDbEntities;
 using ShopsDbEntities.Logic;
+using ShopsDbEntities.OrderData;
+using ShopsDbLogic.Repositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,8 +19,9 @@ namespace ShopDeliveryApplication.Models.Logic
 		private readonly ProductsLogic _productsLogic;
 		private readonly OrdersLogic _ordersLogic;
 		private readonly MessageHandler _messageHandler;
+		private readonly OrderProductRepository _orderProductRepo;
 
-		public async Task SendOrderAsync(string idArrStr, string userId)
+		public async Task SendOrderAsync(long[] idArr, string userId)
 		{
 			//TODO: Заполение информации о заказе
 
@@ -30,11 +33,20 @@ namespace ShopDeliveryApplication.Models.Logic
 
 			var order = new Order()
 			{
-				BucketProducts = idArrStr
+				Created = DateTime.Now
 			};
 
 			await _ordersLogic.Context.CreateAndSaveAsync(order);
-			await _messageHandler.SendActiveOrderMessageAsync(order);
+
+			var bucketProducts = idArr.Select(i => new OrderProduct() { OrderId = order.Id, ProductId = i }).ToArray();
+			await _orderProductRepo.CreateAndSaveAsync(bucketProducts);
+
+			var orderInfo = new OrderInfo()
+			{
+				OrderProductIds = bucketProducts.Select(b => b.Id).ToArray()
+			};
+
+			await _messageHandler.SendActiveOrderMessageAsync(orderInfo);
 		}
 
 		public BucketProduct[] GetBucketProductsBySession(ISession session)

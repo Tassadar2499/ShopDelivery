@@ -16,7 +16,7 @@ namespace OrdersHandler
 		{
 			log.LogInformation($"C# ServiceBus queue trigger function processed message: {queueItem}");
 
-			var order = JsonConvert.DeserializeObject<Order>(queueItem);
+			var order = JsonConvert.DeserializeObject<OrderInfo>(queueItem);
 			var couriersHost = Environment.GetEnvironmentVariable("CouriersWebService", EnvironmentVariableTarget.Process);
 			var url = $"{couriersHost}/Orders/Handle";
 
@@ -40,15 +40,11 @@ namespace OrdersHandler
 	}
 
 	[JsonObject]
-	public class Order
+	public class OrderInfo
 	{
 		[JsonProperty]
-		public long Id { get; set; }
-
+		public long OrderId { get; set; }
 		[JsonProperty]
-		public long UserAddressId { get; set; }
-
-		[JsonProperty]
-		public string BucketProducts { get; set; }
+		public long[] OrderProductIds { get; set; }
 	}
 }

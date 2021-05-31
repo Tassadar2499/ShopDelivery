@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ShopsDbEntities;
+using ShopsDbEntities.OrderData;
 using System.Threading.Tasks;
 
 namespace ShopDeliveryApplication.Models.Logic
@@ -17,7 +18,7 @@ namespace ShopDeliveryApplication.Models.Logic
 			_connectionString = configuration.GetConnectionString("OrdersServiceBus");
 		}
 
-		public async Task SendActiveOrderMessageAsync(Order order)
+		public async Task SendActiveOrderMessageAsync(OrderInfo order)
 		{
 			await using var client = new ServiceBusClient(_connectionString);
 			var sender = client.CreateSender(QUEUE_NAME);
